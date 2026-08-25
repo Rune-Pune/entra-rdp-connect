@@ -1,0 +1,69 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="EntraRdpConnect.App.App"
+             xmlns:local="using:EntraRdpConnect.App"
+             RequestedThemeVariant="Default">
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AccentBrush" Color="#2D6CDF"/>
+                    <SolidColorBrush x:Key="AccentTint" Color="#E7F0FD"/>
+                    <SolidColorBrush x:Key="AmberBg" Color="#FBE7B8"/>
+                    <SolidColorBrush x:Key="AmberFg" Color="#7A4E00"/>
+                    <SolidColorBrush x:Key="InfoBg" Color="#E7F0FD"/>
+                    <SolidColorBrush x:Key="InfoFg" Color="#14498C"/>
+                    <SolidColorBrush x:Key="SuccessBg" Color="#DCF1E4"/>
+                    <SolidColorBrush x:Key="SuccessFg" Color="#1B6B45"/>
+                    <SolidColorBrush x:Key="CardBg" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="CardBorder" Color="#E6E4DE"/>
+                    <SolidColorBrush x:Key="HeroBg" Color="#F5F4F0"/>
+                    <SolidColorBrush x:Key="MutedFg" Color="#6E6E6E"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AccentBrush" Color="#5B90EE"/>
+                    <SolidColorBrush x:Key="AccentTint" Color="#1B3050"/>
+                    <SolidColorBrush x:Key="AmberBg" Color="#46370F"/>
+                    <SolidColorBrush x:Key="AmberFg" Color="#F3D089"/>
+                    <SolidColorBrush x:Key="InfoBg" Color="#16304C"/>
+                    <SolidColorBrush x:Key="InfoFg" Color="#A9CCF3"/>
+                    <SolidColorBrush x:Key="SuccessBg" Color="#1C3A2A"/>
+                    <SolidColorBrush x:Key="SuccessFg" Color="#7FD3A3"/>
+                    <SolidColorBrush x:Key="CardBg" Color="#2B2B2B"/>
+                    <SolidColorBrush x:Key="CardBorder" Color="#3A3A3A"/>
+                    <SolidColorBrush x:Key="HeroBg" Color="#242424"/>
+                    <SolidColorBrush x:Key="MutedFg" Color="#9A9A9A"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <StreamGeometry x:Key="IconPlug">M16,7V3H14V7H10V3H8V7C6.9,7 6,7.9 6,9V15L9,18V21H15V18L18,15V9C18,7.9 17.1,7 16,7Z</StreamGeometry>
+            <StreamGeometry x:Key="IconCheck">M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z</StreamGeometry>
+            <StreamGeometry x:Key="IconPhone">M17,19H7V5H17M17,1H7C5.89,1 5,1.89 5,3V21A2,2 0 0,0 7,23H17A2,2 0 0,0 19,21V3C19,1.89 18.1,1 17,1Z</StreamGeometry>
+            <StreamGeometry x:Key="IconWeb">M16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14M14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56M14.34,14H9.66C9.56,13.34 9.5,12.68 9.5,12C9.5,11.32 9.56,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14M12,19.96C11.17,18.76 10.5,17.43 10.09,16H13.91C13.5,17.43 12.83,18.76 12,19.96M8,8H5.08C6.03,6.34 7.57,5.06 9.4,4.44C8.8,5.55 8.35,6.75 8,8M5.08,16H8C8.35,17.25 8.8,18.45 9.4,19.56C7.57,18.93 6.03,17.65 5.08,16M4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14M12,4.03C12.83,5.23 13.5,6.57 13.91,8H10.09C10.5,6.57 11.17,5.23 12,4.03M18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.34 18.92,8M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</StreamGeometry>
+            <StreamGeometry x:Key="IconShield">M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,7A2,2 0 0,1 14,9A2,2 0 0,1 12,11A2,2 0 0,1 10,9A2,2 0 0,1 12,7M12,12C13,12 14,13 14,14V17H10V14C10,13 11,12 12,12Z</StreamGeometry>
+            <StreamGeometry x:Key="IconCog">M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z</StreamGeometry>
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="9"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="TextBlock.Foreground" Value="White"/>
+        </Style>
+    </Application.Styles>
+</Application>

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EntraRdpConnect.App/EntraRdpConnect.App.csproj" />
+    <Project Path="src/EntraRdpConnect.Cli/EntraRdpConnect.Cli.csproj" />
+    <Project Path="src/EntraRdpConnect.Core/EntraRdpConnect.Core.csproj" />
+    <Project Path="src/EntraRdpConnect.Infrastructure/EntraRdpConnect.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EntraRdpConnect.Tests/EntraRdpConnect.Tests.csproj" />
+  </Folder>
+</Solution>

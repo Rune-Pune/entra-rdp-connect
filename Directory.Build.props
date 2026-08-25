@@ -1,0 +1,15 @@
+<Project>
+
+  <!--
+    Appen orkestrerer Linux-spesifikke verktøy (pkexec, uwg-quick, xfreerdp3 under en
+    pseudo-terminal) og bruker Unix-filrettigheter. Vi merker derfor alle prosjektene som
+    Linux-only, så analysatoren slutter å advare om at f.eks. File.SetUnixFileMode ikke
+    finnes på Windows. Uten dette drukner reelle advarsler i støy.
+  -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatform">
+      <_Parameter1>linux</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
