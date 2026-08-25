@@ -1,0 +1,16 @@
+# .NET build output
+bin/
+obj/
+*.user
+
+# Rider / VS
+.idea/
+.vs/
+
+# Publish output
+publish/
+*.dll.config
+
+# Local, untracked job-specific config (real secrets live in ~/.config/entra-rdp-connect/)
+config.local.json
+appsettings.Local.json

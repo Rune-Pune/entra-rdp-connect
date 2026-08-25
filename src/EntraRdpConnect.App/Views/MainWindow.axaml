@@ -1,0 +1,218 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:EntraRdpConnect.App.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="460" d:DesignHeight="620"
+        x:Class="EntraRdpConnect.App.Views.MainWindow"
+        x:CompileBindings="False"
+        Icon="/Assets/entra-rdp-connect.ico"
+        Title="entra-rdp-connect"
+        Width="460" Height="620" MinWidth="400" MinHeight="520">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border Grid.Row="0" Background="{DynamicResource HeroBg}" Padding="18,14"
+                BorderBrush="{DynamicResource CardBorder}" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource AccentBrush}">
+                    <PathIcon Data="{StaticResource IconPlug}" Width="19" Height="19" Foreground="White"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="1">
+                    <TextBlock Text="entra-rdp-connect" FontSize="15" FontWeight="Medium"/>
+                    <TextBlock Text="VPN og fjernskrivebord" FontSize="11" Foreground="{DynamicResource MutedFg}"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <TabControl Grid.Row="1" Margin="4,4,4,8">
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+                        <PathIcon Data="{StaticResource IconPlug}" Width="15" Height="15"/>
+                        <TextBlock Text="Tilkobling"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid DataContext="{Binding Connection}" RowDefinitions="Auto,*,Auto" Margin="18,10">
+
+                    <Border Grid.Row="0" IsVisible="{Binding HasMissingDependencies}"
+                            Background="{DynamicResource AmberBg}" CornerRadius="10"
+                            Padding="12,10" Margin="0,0,0,8">
+                        <StackPanel Spacing="10">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{StaticResource IconShield}" Width="18" Height="18"
+                                          Foreground="{DynamicResource AmberFg}" VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding MissingDependencies}" Foreground="{DynamicResource AmberFg}"
+                                           TextWrapping="Wrap" MaxWidth="320" FontSize="12"/>
+                            </StackPanel>
+                            <Button Content="Installer det som mangler"
+                                    Command="{Binding InstallDependenciesCommand}"
+                                    IsVisible="{Binding CanInstallDependencies}"
+                                    HorizontalAlignment="Left" Padding="14,7" FontSize="12"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="16">
+
+                        <Panel HorizontalAlignment="Center">
+                            <Border Width="80" Height="80" CornerRadius="40" Background="{DynamicResource AccentTint}"
+                                    IsVisible="{Binding !IsConnected}">
+                                <PathIcon Data="{StaticResource IconPlug}" Width="34" Height="34"
+                                          Foreground="{DynamicResource AccentBrush}"/>
+                            </Border>
+                            <Border Width="80" Height="80" CornerRadius="40" Background="{DynamicResource SuccessBg}"
+                                    IsVisible="{Binding IsConnected}">
+                                <PathIcon Data="{StaticResource IconCheck}" Width="36" Height="36"
+                                          Foreground="{DynamicResource SuccessFg}"/>
+                            </Border>
+                        </Panel>
+
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="{Binding StatusTitle}" FontSize="22" FontWeight="Medium"
+                                       HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding StatusSubtitle}" Foreground="{DynamicResource MutedFg}"
+                                       HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Border IsVisible="{Binding ShowHumanMoment}" Background="{DynamicResource AmberBg}"
+                                CornerRadius="12" Padding="14,12">
+                            <StackPanel Orientation="Horizontal" Spacing="11" HorizontalAlignment="Center">
+                                <PathIcon Data="{StaticResource IconPhone}" Width="22" Height="22"
+                                          Foreground="{DynamicResource AmberFg}" VerticalAlignment="Center"
+                                          IsVisible="{Binding HumanMomentIsPush}"/>
+                                <PathIcon Data="{StaticResource IconWeb}" Width="22" Height="22"
+                                          Foreground="{DynamicResource AmberFg}" VerticalAlignment="Center"
+                                          IsVisible="{Binding !HumanMomentIsPush}"/>
+                                <TextBlock Text="{Binding HumanMoment}" Foreground="{DynamicResource AmberFg}"
+                                           FontWeight="Medium" TextWrapping="Wrap" VerticalAlignment="Center"
+                                           MaxWidth="300"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border IsVisible="{Binding ManualPrompt.IsAwaiting}"
+                                Background="{DynamicResource InfoBg}" CornerRadius="12" Padding="14,12">
+                            <StackPanel DataContext="{Binding ManualPrompt}" Spacing="9">
+                                <TextBlock Foreground="{DynamicResource InfoFg}" TextWrapping="Wrap" FontSize="12"
+                                           Text="Logg inn i nettleseren som åpnet seg. Kopier deretter hele adressen som inneholder «code=» og lim den inn her:"/>
+                                <TextBox Text="{Binding PastedUrl, Mode=TwoWay}" PlaceholderText="https://login.microsoftonline.com/…code=…"
+                                         FontSize="12"/>
+                                <TextBlock Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                           Foreground="{DynamicResource AmberFg}" FontSize="11" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button Content="Bruk denne" Command="{Binding SubmitCommand}" Classes="primary"
+                                            Padding="16,8" FontSize="12"/>
+                                    <Button Content="Åpne lenken igjen" Command="{Binding OpenLinkCommand}"
+                                            Padding="14,8" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="4"/>
+
+                        <Button Content="Koble til" Command="{Binding ConnectCommand}"
+                                Classes="primary" HorizontalAlignment="Center"
+                                IsVisible="{Binding !IsConnected}"/>
+                        <Button Content="Koble fra" Command="{Binding DisconnectCommand}"
+                                HorizontalAlignment="Center" Padding="20,10"
+                                IsVisible="{Binding ManagesVpn}"/>
+                    </StackPanel>
+
+                    <Expander Grid.Row="2" Header="Detaljer" Margin="0,12,0,0" HorizontalAlignment="Stretch">
+                        <Border Background="{DynamicResource CardBg}" BorderBrush="{DynamicResource CardBorder}"
+                                BorderThickness="1" CornerRadius="8" Padding="12,10">
+                            <ScrollViewer MaxHeight="150">
+                                <ItemsControl ItemsSource="{Binding Log}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontFamily="Cascadia Code,Consolas,monospace"
+                                                       FontSize="12" Foreground="{DynamicResource MutedFg}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                    </Expander>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="7">
+                        <PathIcon Data="{StaticResource IconCog}" Width="15" Height="15"/>
+                        <TextBlock Text="Innstillinger"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <ScrollViewer>
+                    <StackPanel DataContext="{Binding Settings}" Margin="18,12" Spacing="8">
+
+                        <Border Background="{DynamicResource InfoBg}" CornerRadius="10" Padding="12,10" Margin="0,0,0,8">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{StaticResource IconShield}" Width="20" Height="20"
+                                          Foreground="{DynamicResource InfoFg}" VerticalAlignment="Top"/>
+                                <TextBlock Foreground="{DynamicResource InfoFg}" TextWrapping="Wrap" MaxWidth="340"
+                                           Text="Ingen passord lagres. Innlogging skjer i nettleseren (Entra) og med push på mobilen."/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border IsVisible="{Binding HasHostProblem}" Background="{DynamicResource AmberBg}"
+                                CornerRadius="10" Padding="12,10" Margin="0,0,0,8">
+                            <StackPanel Spacing="9">
+                                <TextBlock Text="{Binding HostProblem}" Foreground="{DynamicResource AmberFg}"
+                                           TextWrapping="Wrap" MaxWidth="340" FontSize="12"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Button Content="Legg til i /etc/hosts" Command="{Binding AddHostsEntryCommand}"
+                                            Padding="14,7" FontSize="12"/>
+                                    <Button Content="Sjekk på nytt" Command="{Binding CheckHostCommand}"
+                                            Padding="14,7" FontSize="12"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Vertsmaskin (navn)" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding Host}"/>
+
+                        <TextBlock Text="IP-adresse (brukes bare hvis navnet ikke slås opp)" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding HostIp}"/>
+
+                        <TextBlock Text="Bruker (UPN)" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding User}"/>
+
+                        <TextBlock Text="Port" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding Port}"/>
+
+                        <TextBlock Text="VPN-interface" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding VpnInterface}"/>
+
+                        <TextBlock Text="Handshake-timeout (sekunder)" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding HandshakeTimeout}"/>
+
+                        <TextBlock Text="xfreerdp3-argumenter" Foreground="{DynamicResource MutedFg}" FontSize="12"/>
+                        <TextBox Text="{Binding ExtraArgs}" FontSize="12"/>
+
+                        <Border IsVisible="{Binding HasValidationErrors}" Background="{DynamicResource AmberBg}"
+                                CornerRadius="10" Padding="12,10" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <PathIcon Data="{StaticResource IconShield}" Width="18" Height="18"
+                                          Foreground="{DynamicResource AmberFg}" VerticalAlignment="Top"/>
+                                <TextBlock Text="{Binding ValidationErrors}" Foreground="{DynamicResource AmberFg}"
+                                           TextWrapping="Wrap" MaxWidth="330" FontSize="12"/>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right" Margin="0,12,0,0">
+                            <TextBlock Text="{Binding SavedMessage}" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource MutedFg}"/>
+                            <Button Content="Lagre" Command="{Binding SaveCommand}" Classes="primary"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

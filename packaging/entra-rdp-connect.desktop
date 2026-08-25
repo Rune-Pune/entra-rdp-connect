@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=entra-rdp-connect
+GenericName=VPN og fjernskrivebord
+Comment=Koble til en Entra-tilknyttet PC med ett klikk
+Exec=__HOME__/.local/opt/entra-rdp-connect/entra-rdp-connect
+Icon=entra-rdp-connect
+Terminal=false
+Categories=Network;RemoteAccess;
+StartupWMClass=entra-rdp-connect
+Keywords=vpn;rdp;fjernskrivebord;entra;
