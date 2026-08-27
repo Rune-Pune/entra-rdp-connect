@@ -222,7 +222,7 @@ public partial class ConnectionViewModel : ViewModelBase
     /// </summary>
     private static string Describe(Exception ex) => ex switch
     {
-        VpnHandshakeTimeoutException t => L.Format("FailureHandshakeTimeout", t.Timeout.TotalSeconds.ToString("0")),
+        VpnHandshakeTimeoutException t => L.Format("FailureHandshakeTimeout", t.Timeout.TotalSeconds.ToString("0", Localizer.Culture)),
         VpnCommandException { Failure: not CommandFailure.Unknown } c => L[$"Failure{c.Failure}"],
         PrivilegedCommandException { Failure: not CommandFailure.Unknown } p => L[$"Failure{p.Failure}"],
         _ => ex.Message,

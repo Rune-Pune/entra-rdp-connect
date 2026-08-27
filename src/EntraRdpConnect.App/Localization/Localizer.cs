@@ -28,6 +28,10 @@ public sealed partial class Localizer : ObservableObject
 
     private CultureInfo _culture = CultureInfo.CurrentUICulture;
 
+    /// <summary>Kulturen tekstene formateres med. Tall og klokkeslett som havner i
+    /// grensesnittet skal følge valgt språk, ikke systemets.</summary>
+    public static CultureInfo Culture => Instance._culture;
+
     private Localizer() { }
 
     /// <summary>Oppslag brukt fra XAML. Ukjent nøkkel gir nøkkelen selv, så feilen synes

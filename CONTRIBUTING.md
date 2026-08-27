@@ -46,7 +46,6 @@ The CLI is English-only by design — it is a troubleshooting tool.
 - Branch off `main`, keep the change focused on one thing
 - Run `dotnet build && dotnet test` before pushing — CI runs the same, plus a single-file publish smoke test
 - **Write commit messages and code comments in English.** Explain *why*, not what the diff already shows
-- Do not include machine names, user principal names, IP addresses, tenant IDs or personal paths — not in code, not in tests, not in commit messages. This repository is public and its history is permanent
 
 New contributors' workflow runs need manual approval before CI starts, so there may be a short wait on your first pull request. That is a GitHub default, not a comment on your patch.
 
