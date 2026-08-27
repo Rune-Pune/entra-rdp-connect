@@ -14,3 +14,8 @@ publish/
 # Local, untracked job-specific config (real secrets live in ~/.config/entra-rdp-connect/)
 config.local.json
 appsettings.Local.json
+
+# Lokalt Claude Code-oppsett. Bevisst ikke versjonskontrollert: repoet er offentlig,
+# og verktøyvalg hører hjemme i samtalen framfor i repoet.
+CLAUDE.md
+.claude/
