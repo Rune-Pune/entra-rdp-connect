@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest something the tool should do
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The tool has a narrow purpose: getting a Linux desktop onto an Entra ID-joined Windows PC without fighting the OAuth code. Suggestions that make that more reliable, or that make it work on more setups, are the easiest to say yes to.
+
+        Managing multiple saved connections, storing passwords, and anything needing a background service are deliberately out of scope — see [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is the problem?
+      description: Describe the situation you are in, not the solution you have in mind. It is often solvable another way.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like it to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you do today instead?
+      description: A workaround, another tool, or doing it by hand — this says a lot about how much the change is worth.
+
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Would you like to build it?
+      options:
+        - label: I am willing to open a pull request for this

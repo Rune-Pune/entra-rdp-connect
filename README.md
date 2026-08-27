@@ -197,6 +197,13 @@ All found by debugging against a real setup:
 
 .NET 10 · C# (records, nullable, async) · Avalonia 12 + CommunityToolkit.Mvvm · xUnit · 87 tests
 
+## Contributing
+
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for how to build,
+test and submit. `main` requires a green CI run and a pull request, for the maintainer too.
+
+Security issues go through [SECURITY.md](SECURITY.md) rather than a public issue.
+
 ## License
 
 MIT — see [LICENSE](LICENSE).

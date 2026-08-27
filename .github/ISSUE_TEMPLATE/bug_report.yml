@@ -1,0 +1,96 @@
+name: Bug report
+description: Something does not work as it should
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Most answers here depend on the distribution, the FreeRDP version and the browser, so those fields matter more than they look.
+
+        **Before you paste anything:** redact host names, user principal names, IP addresses and tenant IDs. Issues are public and permanent.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the app
+        2. Click Connect
+        3. …
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Where does it go wrong?
+      options:
+        - Starting the app
+        - Bringing up the VPN / waiting for handshake
+        - Starting the remote desktop
+        - The browser sign-in
+        - Capturing the code
+        - After the desktop opens
+        - Somewhere else
+    validations:
+      required: true
+
+  - type: input
+    id: distro
+    attributes:
+      label: Distribution and version
+      placeholder: Ubuntu 24.04, Fedora 41, Arch …
+    validations:
+      required: true
+
+  - type: input
+    id: freerdp
+    attributes:
+      label: FreeRDP version
+      description: Output of `xfreerdp3 --version`
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser the app opened for sign-in, and its version
+    validations:
+      required: true
+
+  - type: dropdown
+    id: vpn
+    attributes:
+      label: Is a VPN interface configured?
+      options:
+        - "Yes — the app raises the tunnel"
+        - "No — I reach the machine directly or use another VPN"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: From the release you downloaded, or the commit you built
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: |
+        From the **Details** pane in the app, or from the CLI. `ERC_RDP_DEBUG=1` adds raw FreeRDP output with the authorization code masked.
+
+        Redact host names and UPNs first.
+      render: text
