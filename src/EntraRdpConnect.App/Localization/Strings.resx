@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <!-- Window chrome -->
+  <data name="AppSubtitle"><value>VPN and remote desktop</value></data>
+  <data name="TabConnection"><value>Connection</value></data>
+  <data name="TabSettings"><value>Settings</value></data>
+  <data name="Details"><value>Details</value></data>
+
+  <!-- Connection tab -->
+  <data name="Connect"><value>Connect</value></data>
+  <data name="Disconnect"><value>Disconnect</value></data>
+  <data name="StatusNotConnected"><value>Not connected</value></data>
+  <data name="StatusConnected"><value>Connected</value></data>
+  <data name="StatusSomethingWentWrong"><value>Something went wrong</value></data>
+  <data name="StatusBringingUpVpn"><value>Bringing up the VPN tunnel…</value></data>
+  <data name="StatusWaitingForHandshake"><value>Waiting for handshake</value></data>
+  <data name="StatusVpnUp"><value>VPN is up</value></data>
+  <data name="StatusStartingRemoteDesktop"><value>Starting remote desktop…</value></data>
+  <data name="StatusSignInInBrowser"><value>Sign in through the browser</value></data>
+  <data name="SubtitleApprovePkexec"><value>approve the password prompt</value></data>
+  <data name="SubtitleHandshakeOk"><value>handshake OK</value></data>
+  <data name="SubtitleViaVpn"><value>{0} · via VPN</value></data>
+  <data name="SubtitleNoHostConfigured"><value>no host configured — see Settings</value></data>
+  <data name="SubtitleSessionEnded"><value>the session ended</value></data>
+  <data name="SubtitleSessionEndedTunnelUp"><value>the session ended · tunnel still up</value></data>
+  <data name="SubtitleDesktopOpen"><value>remote desktop is open</value></data>
+  <data name="SubtitleDesktopOpenTunnelUp"><value>remote desktop is open · tunnel still up</value></data>
+
+  <!-- The two moments that need a human -->
+  <data name="PromptApprovePush"><value>Approve the push notification on your phone</value></data>
+  <data name="PromptSignIn"><value>Sign in — we capture the code automatically</value></data>
+
+  <!-- Manual code entry -->
+  <data name="ManualCodeInstructions"><value>Sign in using the browser that just opened. Then copy the full address containing “code=” and paste it here:</value></data>
+  <data name="ManualCodePlaceholder"><value>https://login.microsoftonline.com/…code=…</value></data>
+  <data name="ManualCodeSubmit"><value>Use this</value></data>
+  <data name="ManualCodeReopen"><value>Open the link again</value></data>
+  <data name="ManualCodeInvalid"><value>Paste the full address, the one containing “code=”.</value></data>
+
+  <!-- Dependencies -->
+  <data name="DependenciesInstall"><value>Install what's missing</value></data>
+  <data name="DependenciesMissingInstallable"><value>Missing {0} — can be installed from here.</value></data>
+  <data name="DependenciesMissingManual"><value>Missing {0} — ships with UniFi Identity and must be fetched from the portal.</value></data>
+
+  <!-- Log lines -->
+  <data name="LogNoVpnConfigured"><value>No VPN configured — going straight to the remote desktop.</value></data>
+  <data name="LogBringingUpVpn"><value>Bringing up the VPN tunnel…</value></data>
+  <data name="LogWaitingForPush"><value>Waiting for push approval on your phone…</value></data>
+  <data name="LogVpnAlreadyUp"><value>The VPN tunnel is already up.</value></data>
+  <data name="LogHandshakeOk"><value>Handshake OK.</value></data>
+  <data name="LogStartingRdp"><value>Starting xfreerdp3…</value></data>
+  <data name="LogOpeningBrowser"><value>Opening the browser for sign-in…</value></data>
+  <data name="LogCodeCaptured"><value>Code captured — connecting.</value></data>
+  <data name="LogSessionEnded"><value>The RDP session ended.</value></data>
+  <data name="LogBringingDownVpn"><value>Bringing down the VPN tunnel…</value></data>
+  <data name="LogVpnDown"><value>The tunnel is down.</value></data>
+  <data name="LogNoVpnToBringDown"><value>No VPN to bring down.</value></data>
+
+  <!-- Settings -->
+  <data name="SettingsNoPasswordsStored"><value>No passwords are stored. You sign in through the browser (Entra) and approve on your phone.</value></data>
+  <data name="SettingsHost"><value>Host (name)</value></data>
+  <data name="SettingsHostIp"><value>IP address (only used if the name doesn't resolve)</value></data>
+  <data name="SettingsUser"><value>User (UPN)</value></data>
+  <data name="SettingsPort"><value>Port</value></data>
+  <data name="SettingsVpnInterface"><value>VPN interface</value></data>
+  <data name="SettingsHandshakeTimeout"><value>Handshake timeout (seconds)</value></data>
+  <data name="SettingsExtraArgs"><value>xfreerdp3 arguments</value></data>
+  <data name="SettingsLanguage"><value>Language</value></data>
+  <data name="SettingsSave"><value>Save</value></data>
+  <data name="SettingsSaved"><value>Saved {0}. Changes take effect on next start.</value></data>
+  <data name="SettingsHostsEntryAdded"><value>Added an entry to /etc/hosts.</value></data>
+  <data name="SettingsAddHostsEntry"><value>Add to /etc/hosts</value></data>
+  <data name="SettingsCheckAgain"><value>Check again</value></data>
+  <data name="SettingsHostUnresolvable"><value>The name “{0}” cannot be resolved. Connecting requires a name (not an IP), so it must exist in DNS or in /etc/hosts.</value></data>
+
+  <!-- Validation -->
+  <data name="ErrorHostRequired"><value>Host (name) is required.</value></data>
+  <data name="ErrorHostMustNotBeIpAddress"><value>The host must be a NAME, not an IP address. With an IP, FreeRDP truncates the address at the first dot and Entra rejects the sign-in. Put the IP in the field below instead.</value></data>
+  <data name="ErrorHostInvalidCharacters"><value>The host name may only contain letters, digits, hyphens and dots.</value></data>
+  <data name="ErrorHostIpInvalid"><value>“{0}” is not a valid IP address.</value></data>
+  <data name="ErrorPortOutOfRange"><value>Port must be a number between 1 and 65535 (RDP uses 3389 by default).</value></data>
+  <data name="ErrorUserRequired"><value>User (UPN) is required.</value></data>
+  <data name="ErrorUserNotUpn"><value>The user must be a full UPN, for example you@example.com.</value></data>
+  <data name="ErrorVpnInterfaceTooLong"><value>The VPN interface name may be at most 15 characters (the Linux limit for network names).</value></data>
+  <data name="ErrorVpnInterfaceInvalidCharacters"><value>The VPN interface name may only contain letters, digits, hyphens, underscores and dots.</value></data>
+  <data name="ErrorHandshakeTimeoutOutOfRange"><value>The handshake timeout must be between 5 and 600 seconds.</value></data>
+  <data name="ErrorExtraArgsEmpty"><value>The xfreerdp3 arguments cannot be empty.</value></data>
+  <data name="ErrorExtraArgsMissingAadFlag"><value>The arguments must include /sec:aad — it is the only way in to an Entra-joined machine.</value></data>
+
+  <!-- Failure messages built from exceptions -->
+  <data name="FailureHandshakeTimeout"><value>No handshake within {0} seconds. Was the push notification in the UniFi Identity app approved? Try again with your phone ready.</value></data>
+  <data name="FailureAutoCaptureUnavailable"><value>(Automatic capture unavailable: {0} Using manual entry.)</value></data>
+</root>

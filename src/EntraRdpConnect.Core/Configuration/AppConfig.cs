@@ -10,6 +10,9 @@ public sealed record AppConfig
 {
     public VpnConfig Vpn { get; init; } = new();
     public RdpConfig Rdp { get; init; } = new();
+
+    /// <summary>Språkkode for grensesnittet: «system», «en» eller «nb».</summary>
+    public string Language { get; init; } = "system";
 }
 
 public sealed record VpnConfig

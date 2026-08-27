@@ -1,6 +1,12 @@
 namespace EntraRdpConnect.Core.Application;
 
-/// <summary>Basis for feil i VPN-flyten.</summary>
+/// <summary>
+/// Basis for feil i VPN-flyten.
+///
+/// Meldingene her er tekniske og engelske, ment for logger og feilsøking. Teksten brukeren ser
+/// formuleres i presentasjonslaget ut fra unntakstypen og dataene den bærer — kjernen skal ikke
+/// kjenne brukerens språk.
+/// </summary>
 public class VpnException : Exception
 {
     public VpnException(string message) : base(message) { }
@@ -12,8 +18,7 @@ public sealed class VpnHandshakeTimeoutException : VpnException
     public TimeSpan Timeout { get; }
 
     public VpnHandshakeTimeoutException(TimeSpan timeout)
-        : base($"Fikk ikke handshake innen {timeout.TotalSeconds:0} sekunder. " +
-               "Ble push-varselet i UniFi Identity-appen på mobilen godkjent? Prøv igjen med mobilen klar.")
+        : base($"No WireGuard handshake within {timeout.TotalSeconds:0} seconds.")
         => Timeout = timeout;
 }
 

@@ -125,6 +125,10 @@ Everything the app needs lives in the **Settings** tab. No passwords are stored 
 
 Settings are stored as JSON at `~/.config/entra-rdp-connect/config.json`.
 
+The interface follows your system language, with **English** and **Norwegian** available today.
+Override it in the **Language** dropdown, or add a language by dropping a `Strings.<code>.resx`
+next to the existing ones — a test fails if any key is left untranslated.
+
 ## Browsers
 
 The app picks one automatically, in this order:
@@ -191,9 +195,7 @@ All found by debugging against a real setup:
 
 ## Tech
 
-.NET 10 · C# (records, nullable, async) · Avalonia 12 + CommunityToolkit.Mvvm · xUnit · 83 tests
-
-> **Note:** the application UI is currently Norwegian. English is the next step — see the project backlog.
+.NET 10 · C# (records, nullable, async) · Avalonia 12 + CommunityToolkit.Mvvm · xUnit · 87 tests
 
 ## License
 

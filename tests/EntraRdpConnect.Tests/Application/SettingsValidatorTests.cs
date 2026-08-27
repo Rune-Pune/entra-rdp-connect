@@ -14,6 +14,9 @@ public sealed class SettingsValidatorTests
         HandshakeTimeout: "45",
         ExtraArgs: "/sec:aad /cert:ignore +clipboard");
 
+    private static SettingsError[] ErrorsIn(SettingsDraft draft)
+        => SettingsValidator.Validate(draft).Select(i => i.Error).ToArray();
+
     [Fact]
     public void Gyldige_innstillinger_gir_ingen_feil()
     {
@@ -27,11 +30,18 @@ public sealed class SettingsValidatorTests
     }
 
     [Fact]
-    public void Ip_som_vertsnavn_avvises_med_forklaring()
+    public void Tomt_vpn_interface_er_gyldig()
+    {
+        // VPN er valgfritt: uten interface styrer ikke appen tunnelen, og går rett på RDP.
+        // Nyttig for dem som når maskinen direkte, eller bruker en annen VPN-klient.
+        Assert.Empty(SettingsValidator.Validate(Valid() with { VpnInterface = "" }));
+    }
+
+    [Fact]
+    public void Ip_som_vertsnavn_avvises()
     {
         // Den klassiske fellen: med IP kapper FreeRDP ved første punktum → AADSTS293004.
-        var errors = SettingsValidator.Validate(Valid() with { Host = "10.0.0.10" });
-        Assert.Contains(errors, e => e.Contains("NAVN") && e.Contains("IP"));
+        Assert.Contains(SettingsError.HostMustNotBeIpAddress, ErrorsIn(Valid() with { Host = "10.0.0.10" }));
     }
 
     [Theory]
@@ -42,33 +52,23 @@ public sealed class SettingsValidatorTests
     [InlineData("-1")]
     public void Ugyldig_port_avvises(string port)
     {
-        Assert.Contains(SettingsValidator.Validate(Valid() with { Port = port }),
-            e => e.Contains("Port"));
+        Assert.Contains(SettingsError.PortOutOfRange, ErrorsIn(Valid() with { Port = port }));
     }
 
     [Theory]
-    [InlineData("", "må fylles ut")]
-    [InlineData("bareBrukernavn", "UPN")]
-    public void Ugyldig_bruker_avvises(string user, string expected)
+    [InlineData("", SettingsError.UserRequired)]
+    [InlineData("bareBrukernavn", SettingsError.UserNotUpn)]
+    public void Ugyldig_bruker_avvises(string user, SettingsError expected)
     {
-        Assert.Contains(SettingsValidator.Validate(Valid() with { User = user }),
-            e => e.Contains(expected));
+        Assert.Contains(expected, ErrorsIn(Valid() with { User = user }));
     }
 
     [Theory]
-    [InlineData("dette-navnet-er-altfor-langt")]  // over 15 tegn
-    [InlineData("wg0 work")]             // mellomrom
-    public void Ugyldig_vpn_interface_avvises(string iface)
+    [InlineData("dette-navnet-er-altfor-langt", SettingsError.VpnInterfaceTooLong)]
+    [InlineData("wg0 work", SettingsError.VpnInterfaceInvalidCharacters)]
+    public void Ugyldig_vpn_interface_avvises(string iface, SettingsError expected)
     {
-        Assert.NotEmpty(SettingsValidator.Validate(Valid() with { VpnInterface = iface }));
-    }
-
-    [Fact]
-    public void Tomt_vpn_interface_er_gyldig()
-    {
-        // VPN er valgfritt: uten interface styrer ikke appen tunnelen, og går rett på RDP.
-        // Nyttig for dem som når maskinen direkte, eller bruker en annen VPN-klient.
-        Assert.Empty(SettingsValidator.Validate(Valid() with { VpnInterface = "" }));
+        Assert.Contains(expected, ErrorsIn(Valid() with { VpnInterface = iface }));
     }
 
     [Theory]
@@ -77,22 +77,30 @@ public sealed class SettingsValidatorTests
     [InlineData("tull")]
     public void Urimelig_timeout_avvises(string timeout)
     {
-        Assert.Contains(SettingsValidator.Validate(Valid() with { HandshakeTimeout = timeout }),
-            e => e.Contains("Handshake-timeout"));
+        Assert.Contains(SettingsError.HandshakeTimeoutOutOfRange, ErrorsIn(Valid() with { HandshakeTimeout = timeout }));
     }
 
     [Fact]
     public void Argumenter_uten_sec_aad_avvises()
     {
         // Uten /sec:aad kommer man aldri gjennom Entra-innloggingen.
-        Assert.Contains(SettingsValidator.Validate(Valid() with { ExtraArgs = "/cert:ignore +clipboard" }),
-            e => e.Contains("/sec:aad"));
+        Assert.Contains(SettingsError.ExtraArgsMissingAadFlag,
+            ErrorsIn(Valid() with { ExtraArgs = "/cert:ignore +clipboard" }));
+    }
+
+    [Fact]
+    public void Ugyldig_ip_baerer_verdien_som_utloeste_feilen()
+    {
+        // Presentasjonslaget skal kunne si hvilken verdi som var gal, uten at kjernen formulerer det.
+        var issue = Assert.Single(SettingsValidator.Validate(Valid() with { HostIp = "ikke-en-ip" }));
+        Assert.Equal(SettingsError.HostIpInvalid, issue.Error);
+        Assert.Equal("ikke-en-ip", issue.Value);
     }
 
     [Fact]
     public void Flere_feil_rapporteres_samtidig()
     {
-        var errors = SettingsValidator.Validate(new SettingsDraft("", "ugyldig-ip", "abc", "", "", "0", ""));
-        Assert.True(errors.Count >= 6, $"forventet minst 6 feil, fikk {errors.Count}");
+        var errors = ErrorsIn(new SettingsDraft("", "ugyldig-ip", "abc", "", "", "0", ""));
+        Assert.True(errors.Length >= 6, $"forventet minst 6 feil, fikk {errors.Length}");
     }
 }

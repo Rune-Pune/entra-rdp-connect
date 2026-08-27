@@ -44,9 +44,10 @@ public sealed class VpnConnectionTests
         var ex = await Assert.ThrowsAsync<VpnHandshakeTimeoutException>(
             () => connection.EnsureConnectedAsync());
 
+        // Unntaket bærer dataene presentasjonslaget trenger for å forklare hva som gikk galt —
+        // selve teksten om push-varselet ligger i ressursene, ikke i kjernen.
         Assert.Equal(TimeSpan.FromSeconds(45), ex.Timeout);
         Assert.Equal(1, controller.BringUpCalls);
-        Assert.Contains("push", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

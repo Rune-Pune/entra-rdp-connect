@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EntraRdpConnect.App.Localization;
 using EntraRdpConnect.Core.Application;
 using EntraRdpConnect.Core.Configuration;
 using EntraRdpConnect.Core.Ports;
@@ -11,6 +12,7 @@ public partial class SettingsViewModel : ViewModelBase
     private readonly IConfigProvider _provider;
     private readonly IHostResolution? _hostResolution;
     private AppConfig _current;
+    private static Localizer L => Localizer.Instance;
 
     public SettingsViewModel(IConfigProvider provider, AppConfig config, IHostResolution? hostResolution = null)
     {
@@ -25,6 +27,8 @@ public partial class SettingsViewModel : ViewModelBase
         ExtraArgs = string.Join(' ', config.Rdp.ExtraArgs);
         VpnInterface = config.Vpn.Interface;
         HandshakeTimeout = config.Vpn.HandshakeTimeoutSeconds.ToString();
+        SelectedLanguage = Localizer.Languages.FirstOrDefault(l => l.Code == config.Language)
+                           ?? Localizer.Languages[0];
 
         _ = CheckHostAsync();
     }
@@ -37,6 +41,14 @@ public partial class SettingsViewModel : ViewModelBase
     [ObservableProperty] public partial string VpnInterface { get; set; }
     [ObservableProperty] public partial string HandshakeTimeout { get; set; }
     [ObservableProperty] public partial string? SavedMessage { get; set; }
+
+    /// <summary>Språkene vi har oversettelser for.</summary>
+    public IReadOnlyList<LanguageOption> Languages => Localizer.Languages;
+
+    /// <summary>Valgt språk. «system» følger operativsystemet.</summary>
+    [ObservableProperty] public partial LanguageOption SelectedLanguage { get; set; }
+
+    partial void OnSelectedLanguageChanged(LanguageOption value) => L.SetLanguage(value.Code);
 
     /// <summary>Punktliste over hva som må rettes før innstillingene kan lagres.</summary>
     [ObservableProperty]
@@ -59,7 +71,7 @@ public partial class SettingsViewModel : ViewModelBase
         var errors = SettingsValidator.Validate(draft);
         if (errors.Count > 0)
         {
-            ValidationErrors = string.Join("\n", errors.Select(e => "• " + e));
+            ValidationErrors = string.Join("\n", errors.Select(e => "• " + L.Describe(e)));
             SavedMessage = null;
             return;
         }
@@ -72,6 +84,7 @@ public partial class SettingsViewModel : ViewModelBase
 
         _current = _current with
         {
+            Language = SelectedLanguage.Code,
             Vpn = _current.Vpn with { Interface = VpnInterface.Trim(), HandshakeTimeoutSeconds = timeout },
             Rdp = _current.Rdp with
             {
@@ -84,7 +97,7 @@ public partial class SettingsViewModel : ViewModelBase
         };
 
         await _provider.SaveAsync(_current);
-        SavedMessage = $"Lagret {DateTime.Now:HH:mm}. Endringer gjelder fra neste oppstart.";
+        SavedMessage = L.Format("SettingsSaved", DateTime.Now.ToString("HH:mm"));
         await CheckHostAsync();
     }
 
@@ -102,8 +115,7 @@ public partial class SettingsViewModel : ViewModelBase
         var name = Host.Trim();
         HostProblem = await _hostResolution.CanResolveAsync(name)
             ? null
-            : $"Navnet «{name}» kan ikke slås opp. Tilkoblingen krever navn (ikke IP), så det må " +
-              "finnes i DNS eller i /etc/hosts.";
+            : L.Format("SettingsHostUnresolvable", name);
     }
 
     [RelayCommand]
@@ -114,7 +126,7 @@ public partial class SettingsViewModel : ViewModelBase
         try
         {
             await _hostResolution.AddHostsEntryAsync(HostIp.Trim(), Host.Trim());
-            SavedMessage = "La til oppføring i /etc/hosts.";
+            SavedMessage = L["SettingsHostsEntryAdded"];
             await CheckHostAsync();
         }
         catch (Exception ex)

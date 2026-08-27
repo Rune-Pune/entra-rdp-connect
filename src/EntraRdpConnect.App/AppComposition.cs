@@ -1,4 +1,5 @@
 using EntraRdpConnect.App.ViewModels;
+using EntraRdpConnect.App.Localization;
 using EntraRdpConnect.Core.Application;
 using EntraRdpConnect.Core.Configuration;
 using EntraRdpConnect.Core.Domain;
@@ -24,6 +25,8 @@ internal static class AppComposition
         try { config = await provider.GetAsync(); }
         catch { config = new AppConfig(); }
 
+        Localizer.Instance.SetLanguage(config.Language);
+
         // VPN er valgfritt: uten interface går vi rett på RDP og antar at verten er nåbar.
         var managesVpn = !string.IsNullOrWhiteSpace(config.Vpn.Interface);
         var vpn = managesVpn
@@ -43,8 +46,8 @@ internal static class AppComposition
         var orchestrator = new ConnectionOrchestrator(vpn, rdp, rdpInfo, BuildResolver(manualPrompt));
 
         var target = string.IsNullOrWhiteSpace(config.Rdp.Host)
-            ? "ingen vert konfigurert — se Innstillinger"
-            : managesVpn ? $"{config.Rdp.Host} · via VPN" : config.Rdp.Host;
+            ? Localizer.Instance["SubtitleNoHostConfigured"]
+            : managesVpn ? Localizer.Instance.Format("SubtitleViaVpn", config.Rdp.Host) : config.Rdp.Host;
 
         // Sjekker systemverktøyene ved oppstart, og kan tilby å installere det som finnes i apt.
         return new MainViewModel(

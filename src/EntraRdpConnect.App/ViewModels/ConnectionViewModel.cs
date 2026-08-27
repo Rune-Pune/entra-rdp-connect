@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EntraRdpConnect.Core.Application;
+using EntraRdpConnect.App.Localization;
 using EntraRdpConnect.Core.Ports;
 
 namespace EntraRdpConnect.App.ViewModels;
@@ -12,6 +13,7 @@ public partial class ConnectionViewModel : ViewModelBase
     private readonly string _idleSubtitle;
 
     private readonly ISystemDependencies? _dependencies;
+    private static Localizer L => Localizer.Instance;
 
     public ConnectionViewModel(
         ConnectionOrchestrator orchestrator,
@@ -58,9 +60,9 @@ public partial class ConnectionViewModel : ViewModelBase
 
         var parts = new List<string>();
         if (auto.Count > 0)
-            parts.Add($"Mangler {string.Join(", ", auto)} — kan installeres herfra.");
+            parts.Add(L.Format("DependenciesMissingInstallable", string.Join(", ", auto)));
         if (manual.Count > 0)
-            parts.Add($"Mangler {string.Join(", ", manual)} — følger med UniFi Identity og må hentes fra portalen.");
+            parts.Add(L.Format("DependenciesMissingManual", string.Join(", ", manual)));
 
         MissingDependencies = string.Join(" ", parts);
         CanInstallDependencies = auto.Count > 0;
@@ -79,7 +81,7 @@ public partial class ConnectionViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            AppendLog("✗ " + ex.Message);
+            AppendLog("✗ " + Describe(ex));
         }
         finally
         {
@@ -87,7 +89,7 @@ public partial class ConnectionViewModel : ViewModelBase
         }
     }
 
-    [ObservableProperty] public partial string StatusTitle { get; set; } = "Ikke tilkoblet";
+    [ObservableProperty] public partial string StatusTitle { get; set; } = Localizer.Instance["StatusNotConnected"];
     [ObservableProperty] public partial string StatusSubtitle { get; set; } = "";
     [ObservableProperty] public partial bool IsBusy { get; set; }
     [ObservableProperty] public partial bool IsConnected { get; set; }
@@ -114,12 +116,12 @@ public partial class ConnectionViewModel : ViewModelBase
         try
         {
             await _orchestrator.ConnectAsync(vpnProgress, rdpProgress);
-            SetStatus("Ikke tilkoblet", EndedSubtitle, busy: false, humanMoment: null);
+            SetStatus(L["StatusNotConnected"], EndedSubtitle, busy: false, humanMoment: null);
         }
         catch (Exception ex)
         {
-            AppendLog("✗ " + ex.Message);
-            SetStatus("Noe gikk galt", ex.Message, busy: false, humanMoment: null);
+            AppendLog("✗ " + Describe(ex));
+            SetStatus(L["StatusSomethingWentWrong"], Describe(ex), busy: false, humanMoment: null);
         }
         finally
         {
@@ -130,18 +132,18 @@ public partial class ConnectionViewModel : ViewModelBase
     [RelayCommand]
     private async Task DisconnectAsync()
     {
-        if (!ManagesVpn) { AppendLog("Ingen VPN å koble ned."); return; }
+        if (!ManagesVpn) { AppendLog(L["LogNoVpnToBringDown"]); return; }
 
-        AppendLog("Kobler ned VPN-tunnelen…");
+        AppendLog(L["LogBringingDownVpn"]);
         try
         {
             await _orchestrator.DisconnectAsync();
-            AppendLog("Tunnelen er tatt ned.");
-            SetStatus("Ikke tilkoblet", _idleSubtitle, busy: false, humanMoment: null);
+            AppendLog(L["LogVpnDown"]);
+            SetStatus(L["StatusNotConnected"], _idleSubtitle, busy: false, humanMoment: null);
         }
         catch (Exception ex)
         {
-            AppendLog("✗ " + ex.Message);
+            AppendLog("✗ " + Describe(ex));
         }
     }
 
@@ -150,24 +152,23 @@ public partial class ConnectionViewModel : ViewModelBase
         switch (phase)
         {
             case VpnPhase.NotConfigured:
-                AppendLog("Ingen VPN konfigurert — går rett på fjernskrivebordet.");
+                AppendLog(L["LogNoVpnConfigured"]);
                 break;
             case VpnPhase.BringingUp:
-                SetStatus("Reiser VPN-tunnelen…", "godkjenn pkexec-dialogen", busy: true, humanMoment: null);
-                AppendLog("Reiser VPN-tunnelen (pkexec)…");
+                SetStatus(L["StatusBringingUpVpn"], L["SubtitleApprovePkexec"], busy: true, humanMoment: null);
+                AppendLog(L["LogBringingUpVpn"]);
                 break;
             case VpnPhase.WaitingForHandshake:
                 HumanMomentIsPush = true;
-                SetStatus("Venter på handshake", "", busy: true,
-                    humanMoment: "Godkjenn push i UniFi Identity-appen på mobilen");
-                AppendLog("Venter på push-godkjenning på mobilen…");
+                SetStatus(L["StatusWaitingForHandshake"], "", busy: true, humanMoment: L["PromptApprovePush"]);
+                AppendLog(L["LogWaitingForPush"]);
                 break;
             case VpnPhase.AlreadyConnected:
-                AppendLog("VPN-tunnelen er allerede oppe.");
+                AppendLog(L["LogVpnAlreadyUp"]);
                 break;
             case VpnPhase.Connected:
-                SetStatus("VPN oppe", "handshake OK", busy: true, humanMoment: null);
-                AppendLog("Handshake OK.");
+                SetStatus(L["StatusVpnUp"], L["SubtitleHandshakeOk"], busy: true, humanMoment: null);
+                AppendLog(L["LogHandshakeOk"]);
                 break;
         }
     }
@@ -177,31 +178,30 @@ public partial class ConnectionViewModel : ViewModelBase
         switch (phase)
         {
             case RdpPhase.Starting:
-                SetStatus("Starter fjernskrivebord…", "xfreerdp3", busy: true, humanMoment: null);
-                AppendLog("Starter xfreerdp3…");
+                SetStatus(L["StatusStartingRemoteDesktop"], "xfreerdp3", busy: true, humanMoment: null);
+                AppendLog(L["LogStartingRdp"]);
                 break;
             case RdpPhase.LoginUrlDetected:
                 HumanMomentIsPush = false;
-                SetStatus("Logg inn i nettleseren", "", busy: true,
-                    humanMoment: "Logg inn i nettleseren — vi fanger koden automatisk");
-                AppendLog("Åpner nettleseren for innlogging…");
+                SetStatus(L["StatusSignInInBrowser"], "", busy: true, humanMoment: L["PromptSignIn"]);
+                AppendLog(L["LogOpeningBrowser"]);
                 break;
             case RdpPhase.SubmittingCode:
-                SetStatus("Tilkoblet", ConnectedSubtitle, busy: false, humanMoment: null);
+                SetStatus(L["StatusConnected"], ConnectedSubtitle, busy: false, humanMoment: null);
                 IsConnected = true;
-                AppendLog("✓ Koden fanget — kobler til.");
+                AppendLog("✓ " + L["LogCodeCaptured"]);
                 break;
             case RdpPhase.SessionEnded:
-                AppendLog("RDP-økten er avsluttet.");
+                AppendLog(L["LogSessionEnded"]);
                 break;
         }
     }
 
     private string ConnectedSubtitle =>
-        ManagesVpn ? "fjernskrivebordet er åpent · tunnelen står oppe" : "fjernskrivebordet er åpent";
+        ManagesVpn ? L["SubtitleDesktopOpenTunnelUp"] : L["SubtitleDesktopOpen"];
 
     private string EndedSubtitle =>
-        ManagesVpn ? "økten ble avsluttet · tunnelen står oppe" : "økten ble avsluttet";
+        ManagesVpn ? L["SubtitleSessionEndedTunnelUp"] : L["SubtitleSessionEnded"];
 
     private void SetStatus(string title, string subtitle, bool busy, string? humanMoment)
     {
@@ -212,4 +212,12 @@ public partial class ConnectionViewModel : ViewModelBase
     }
 
     private void AppendLog(string line) => Log.Add($"{DateTime.Now:HH:mm:ss}  {line}");
+
+    /// <summary>Unntakene bærer tekniske engelske meldinger; her formuleres de på brukerens språk.</summary>
+    private static string Describe(Exception ex) => ex switch
+    {
+        VpnHandshakeTimeoutException t => L.Format("FailureHandshakeTimeout", t.Timeout.TotalSeconds.ToString("0")),
+        _ => ex.Message,
+    };
+
 }

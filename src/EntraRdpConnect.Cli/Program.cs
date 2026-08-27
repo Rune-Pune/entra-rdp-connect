@@ -39,7 +39,7 @@ static async Task<int> StatusAsync()
     }
     string[] vpnOnly = ["uwg-quick", "uwg"];
 
-    Console.WriteLine("Systemavhengigheter:");
+    Console.WriteLine("System dependencies:");
     var results = DependencyChecker.Check();
     foreach (var r in results)
     {
@@ -47,7 +47,7 @@ static async Task<int> StatusAsync()
         var mark = r.Found ? "✓" : required ? "✗" : "–";
         var where = r.Found
             ? r.ResolvedPath
-            : required ? "MANGLER (påkrevd)" : "ikke funnet (valgfri)";
+            : required ? "MISSING (required)" : "not found (optional)";
         Console.WriteLine($"  {mark} {r.Dependency.Command,-11} {where}");
         Console.WriteLine($"      {r.Dependency.Purpose}");
     }
@@ -62,29 +62,29 @@ static async Task<int> StatusAsync()
     if (configProvider.Exists)
     {
         var cfg = await configProvider.GetAsync();
-        Console.WriteLine($"Config lastet fra {configProvider.Location}:");
-        Console.WriteLine($"  RDP-host:  {cfg.Rdp.Host} ({cfg.Rdp.HostIp}:{cfg.Rdp.Port})");
-        Console.WriteLine($"  Bruker:    {cfg.Rdp.User}");
-        Console.WriteLine($"  VPN-if:    {cfg.Vpn.Interface}");
-        Console.WriteLine($"  RDP-args:  {string.Join(' ', cfg.Rdp.ExtraArgs)}");
+        Console.WriteLine($"Config loaded from {configProvider.Location}:");
+        Console.WriteLine($"  Host:      {cfg.Rdp.Host} ({cfg.Rdp.HostIp}:{cfg.Rdp.Port})");
+        Console.WriteLine($"  User:      {cfg.Rdp.User}");
+        Console.WriteLine($"  VPN if:    {cfg.Vpn.Interface}");
+        Console.WriteLine($"  RDP args:  {string.Join(' ', cfg.Rdp.ExtraArgs)}");
     }
     else
     {
         var dir = Path.GetDirectoryName(configProvider.Location);
-        Console.WriteLine($"Ingen config på {configProvider.Location}. Opprett den:");
+        Console.WriteLine($"No config at {configProvider.Location}. Create it:");
         Console.WriteLine($"    mkdir -p {dir}");
         Console.WriteLine($"    cp config.sample.json {configProvider.Location}");
-        Console.WriteLine("  (fyll deretter inn ekte verdier)");
+        Console.WriteLine("  (then fill in your values)");
     }
 
     Console.WriteLine();
     if (missingRequired.Count > 0)
     {
-        Console.WriteLine($"⚠ {missingRequired.Count} påkrevd(e) avhengighet(er) mangler — appen fungerer ikke før de er på plass.");
+        Console.WriteLine($"⚠ {missingRequired.Count} required dependency/dependencies missing — the app will not work until they are installed.");
         return 1;
     }
 
-    Console.WriteLine("✓ Alle påkrevde avhengigheter er på plass.");
+    Console.WriteLine("✓ All required dependencies are present.");
     return 0;
 }
 
@@ -96,15 +96,15 @@ static async Task<int> VpnStatusAsync()
 
     if (string.IsNullOrWhiteSpace(config.Vpn.Interface))
     {
-        Console.WriteLine("Ingen VPN konfigurert (vpn.interface er tom) — appen styrer ikke noen tunnel.");
+        Console.WriteLine("No VPN configured (vpn.interface is empty) — the app does not manage a tunnel.");
         return 0;
     }
     var controller = new UwgVpnController(config.Vpn.Interface);
 
     var status = await controller.GetStatusAsync();
-    Console.WriteLine($"Interface {config.Vpn.Interface}: {(status.InterfaceUp ? "oppe" : "nede")}");
-    Console.WriteLine($"Mottatt:   {status.ReceivedBytes} B");
-    Console.WriteLine(status.IsConnected ? "✓ Tilkoblet (handshake OK)" : "✗ Ikke tilkoblet");
+    Console.WriteLine($"Interface {config.Vpn.Interface}: {(status.InterfaceUp ? "up" : "down")}");
+    Console.WriteLine($"Received:  {status.ReceivedBytes} B");
+    Console.WriteLine(status.IsConnected ? "✓ Connected (handshake OK)" : "✗ Not connected");
     return 0;
 }
 
@@ -116,7 +116,7 @@ static async Task<int> VpnUpAsync()
 
     if (string.IsNullOrWhiteSpace(config.Vpn.Interface))
     {
-        Console.WriteLine("Ingen VPN konfigurert (vpn.interface er tom) — appen styrer ikke noen tunnel.");
+        Console.WriteLine("No VPN configured (vpn.interface is empty) — the app does not manage a tunnel.");
         return 0;
     }
     var clock = services.GetRequiredService<ISystemClock>();
@@ -131,7 +131,7 @@ static async Task<int> VpnUpAsync()
     try
     {
         var status = await connection.EnsureConnectedAsync(progress);
-        Console.WriteLine($"✓ Tunnelen er oppe (mottatt {status.ReceivedBytes} B).");
+        Console.WriteLine($"✓ Tunnel is up (received {status.ReceivedBytes} B).");
         return 0;
     }
     catch (VpnException ex)
@@ -149,7 +149,7 @@ static async Task<int> VpnDownAsync()
 
     if (string.IsNullOrWhiteSpace(config.Vpn.Interface))
     {
-        Console.WriteLine("Ingen VPN konfigurert (vpn.interface er tom) — appen styrer ikke noen tunnel.");
+        Console.WriteLine("No VPN configured (vpn.interface is empty) — the app does not manage a tunnel.");
         return 0;
     }
     var controller = new UwgVpnController(config.Vpn.Interface);
@@ -157,7 +157,7 @@ static async Task<int> VpnDownAsync()
     try
     {
         await controller.BringDownAsync();
-        Console.WriteLine("Tunnelen er tatt ned.");
+        Console.WriteLine("Tunnel is down.");
         return 0;
     }
     catch (VpnException ex)
@@ -179,7 +179,7 @@ static async Task<int> RdpAsync()
         var vpn = new UwgVpnController(config.Vpn.Interface);
         if (!(await vpn.GetStatusAsync()).IsConnected)
         {
-            Console.WriteLine("✗ VPN-tunnelen er ikke oppe. Kjør 'vpn-up' først.");
+            Console.WriteLine("✗ The VPN tunnel is not up. Run 'vpn-up' first.");
             return 1;
         }
     }
@@ -194,7 +194,7 @@ static async Task<int> RdpAsync()
     try
     {
         var exit = await session.ConnectAsync(info, resolver, progress);
-        Console.WriteLine($"RDP-økt avsluttet (exit {exit}).");
+        Console.WriteLine($"RDP session ended (exit {exit}).");
         return exit;
     }
     catch (Exception ex)
@@ -231,7 +231,7 @@ static async Task<int> ConnectCommandAsync()
     try
     {
         var exit = await orchestrator.ConnectAsync(vpnProgress, rdpProgress);
-        Console.WriteLine($"Økt avsluttet (exit {exit}). Tunnelen står oppe — bruk 'vpn-down' for å koble ned.");
+        Console.WriteLine($"Session ended (exit {exit}). The tunnel is still up — use 'vpn-down' to bring it down.");
         return exit;
     }
     catch (VpnException ex)
@@ -253,7 +253,7 @@ static Func<Uri, CancellationToken, Task<Uri>> CreateLoginResolver(ISystemClock 
     }
     catch (InvalidOperationException ex)
     {
-        Console.WriteLine($"(Auto-fangst utilgjengelig: {ex.Message} Bruker manuell innliming.)");
+        Console.WriteLine($"(Automatic capture unavailable: {ex.Message} Using manual entry.)");
     }
 
     return async (loginUrl, ct) =>
@@ -261,16 +261,16 @@ static Func<Uri, CancellationToken, Task<Uri>> CreateLoginResolver(ISystemClock 
         if (autoResolver is not null)
         {
             Console.WriteLine();
-            Console.WriteLine("Åpner Firefox — logg inn (MFA hoppes over hvis du alt er innlogget)…");
+            Console.WriteLine("Opening the browser — sign in (MFA is skipped if you are already signed in)…");
             try
             {
                 var redirect = await autoResolver.ResolveAsync(loginUrl, ct);
-                Console.WriteLine("✓ Fanget koden automatisk fra Firefox-historikken.");
+                Console.WriteLine("✓ Captured the code automatically from browser history.");
                 return redirect;
             }
             catch (OperationCanceledException) when (!ct.IsCancellationRequested)
             {
-                Console.WriteLine("Auto-fangst timet ut — faller tilbake til manuell innliming.");
+                Console.WriteLine("Automatic capture timed out — falling back to manual entry.");
             }
         }
 
@@ -280,12 +280,12 @@ static Func<Uri, CancellationToken, Task<Uri>> CreateLoginResolver(ISystemClock 
     static Uri ReadRedirectManually(Uri loginUrl)
     {
         Console.WriteLine();
-        Console.WriteLine("Åpne denne i nettleseren og logg inn:");
+        Console.WriteLine("Open this in your browser and sign in:");
         Console.WriteLine($"  {loginUrl}");
-        Console.WriteLine("Lim inn nativeclient?code=-URL-en her og trykk Enter (vær rask, <60 s):");
+        Console.WriteLine("Paste the nativeclient?code= URL here and press Enter (be quick, <60 s):");
         var pasted = Console.ReadLine()?.Trim();
         if (string.IsNullOrWhiteSpace(pasted) || !Uri.TryCreate(pasted, UriKind.Absolute, out var manual))
-            throw new InvalidOperationException("Ugyldig eller tom URL limt inn.");
+            throw new InvalidOperationException("Invalid or empty URL.");
         return manual;
     }
 }
@@ -293,12 +293,12 @@ static Func<Uri, CancellationToken, Task<Uri>> CreateLoginResolver(ISystemClock 
 // Menneskelige meldinger for VPN-fasene.
 static string DescribeVpnPhase(VpnPhase phase) => phase switch
 {
-    VpnPhase.NotConfigured => "Ingen VPN konfigurert — går rett på fjernskrivebordet.",
-    VpnPhase.AlreadyConnected => "Tunnelen er allerede oppe.",
-    VpnPhase.BringingUp => "Reiser tunnelen (godkjenn pkexec-dialogen)…",
-    VpnPhase.WaitingForHandshake => "Venter på handshake — godkjenn push i UniFi Identity-appen på mobilen…",
+    VpnPhase.NotConfigured => "No VPN configured — going straight to the remote desktop.",
+    VpnPhase.AlreadyConnected => "The tunnel is already up.",
+    VpnPhase.BringingUp => "Bringing up the tunnel (approve the password prompt)…",
+    VpnPhase.WaitingForHandshake => "Waiting for handshake — approve the push notification on your phone…",
     VpnPhase.Connected => "Handshake OK.",
-    VpnPhase.TimedOut => "Tidsavbrudd.",
+    VpnPhase.TimedOut => "Timed out.",
     _ => phase.ToString(),
 };
 

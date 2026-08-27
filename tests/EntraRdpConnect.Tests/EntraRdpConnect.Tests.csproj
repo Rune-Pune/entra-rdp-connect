@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\EntraRdpConnect.Core\EntraRdpConnect.Core.csproj" />
     <ProjectReference Include="..\..\src\EntraRdpConnect.Infrastructure\EntraRdpConnect.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\EntraRdpConnect.App\EntraRdpConnect.App.csproj" />
   </ItemGroup>
 
 </Project>

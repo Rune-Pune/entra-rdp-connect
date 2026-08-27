@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="0" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="AppSubtitle"><value>VPN og fjernskrivebord</value></data>
+  <data name="TabConnection"><value>Tilkobling</value></data>
+  <data name="TabSettings"><value>Innstillinger</value></data>
+  <data name="Details"><value>Detaljer</value></data>
+
+  <data name="Connect"><value>Koble til</value></data>
+  <data name="Disconnect"><value>Koble fra</value></data>
+  <data name="StatusNotConnected"><value>Ikke tilkoblet</value></data>
+  <data name="StatusConnected"><value>Tilkoblet</value></data>
+  <data name="StatusSomethingWentWrong"><value>Noe gikk galt</value></data>
+  <data name="StatusBringingUpVpn"><value>Reiser VPN-tunnelen…</value></data>
+  <data name="StatusWaitingForHandshake"><value>Venter på handshake</value></data>
+  <data name="StatusVpnUp"><value>VPN oppe</value></data>
+  <data name="StatusStartingRemoteDesktop"><value>Starter fjernskrivebord…</value></data>
+  <data name="StatusSignInInBrowser"><value>Logg inn i nettleseren</value></data>
+  <data name="SubtitleApprovePkexec"><value>godkjenn passord-dialogen</value></data>
+  <data name="SubtitleHandshakeOk"><value>handshake OK</value></data>
+  <data name="SubtitleViaVpn"><value>{0} · via VPN</value></data>
+  <data name="SubtitleNoHostConfigured"><value>ingen vert konfigurert — se Innstillinger</value></data>
+  <data name="SubtitleSessionEnded"><value>økten ble avsluttet</value></data>
+  <data name="SubtitleSessionEndedTunnelUp"><value>økten ble avsluttet · tunnelen står oppe</value></data>
+  <data name="SubtitleDesktopOpen"><value>fjernskrivebordet er åpent</value></data>
+  <data name="SubtitleDesktopOpenTunnelUp"><value>fjernskrivebordet er åpent · tunnelen står oppe</value></data>
+
+  <data name="PromptApprovePush"><value>Godkjenn push-varselet på mobilen</value></data>
+  <data name="PromptSignIn"><value>Logg inn — vi fanger koden automatisk</value></data>
+
+  <data name="ManualCodeInstructions"><value>Logg inn i nettleseren som åpnet seg. Kopier deretter hele adressen som inneholder «code=» og lim den inn her:</value></data>
+  <data name="ManualCodePlaceholder"><value>https://login.microsoftonline.com/…code=…</value></data>
+  <data name="ManualCodeSubmit"><value>Bruk denne</value></data>
+  <data name="ManualCodeReopen"><value>Åpne lenken igjen</value></data>
+  <data name="ManualCodeInvalid"><value>Lim inn hele adressen, den som inneholder «code=».</value></data>
+
+  <data name="DependenciesInstall"><value>Installer det som mangler</value></data>
+  <data name="DependenciesMissingInstallable"><value>Mangler {0} — kan installeres herfra.</value></data>
+  <data name="DependenciesMissingManual"><value>Mangler {0} — følger med UniFi Identity og må hentes fra portalen.</value></data>
+
+  <data name="LogNoVpnConfigured"><value>Ingen VPN konfigurert — går rett på fjernskrivebordet.</value></data>
+  <data name="LogBringingUpVpn"><value>Reiser VPN-tunnelen…</value></data>
+  <data name="LogWaitingForPush"><value>Venter på push-godkjenning på mobilen…</value></data>
+  <data name="LogVpnAlreadyUp"><value>VPN-tunnelen er allerede oppe.</value></data>
+  <data name="LogHandshakeOk"><value>Handshake OK.</value></data>
+  <data name="LogStartingRdp"><value>Starter xfreerdp3…</value></data>
+  <data name="LogOpeningBrowser"><value>Åpner nettleseren for innlogging…</value></data>
+  <data name="LogCodeCaptured"><value>Koden er fanget — kobler til.</value></data>
+  <data name="LogSessionEnded"><value>RDP-økten er avsluttet.</value></data>
+  <data name="LogBringingDownVpn"><value>Kobler ned VPN-tunnelen…</value></data>
+  <data name="LogVpnDown"><value>Tunnelen er tatt ned.</value></data>
+  <data name="LogNoVpnToBringDown"><value>Ingen VPN å koble ned.</value></data>
+
+  <data name="SettingsNoPasswordsStored"><value>Ingen passord lagres. Innlogging skjer i nettleseren (Entra) og med push på mobilen.</value></data>
+  <data name="SettingsHost"><value>Vertsmaskin (navn)</value></data>
+  <data name="SettingsHostIp"><value>IP-adresse (brukes bare hvis navnet ikke slås opp)</value></data>
+  <data name="SettingsUser"><value>Bruker (UPN)</value></data>
+  <data name="SettingsPort"><value>Port</value></data>
+  <data name="SettingsVpnInterface"><value>VPN-interface</value></data>
+  <data name="SettingsHandshakeTimeout"><value>Handshake-timeout (sekunder)</value></data>
+  <data name="SettingsExtraArgs"><value>xfreerdp3-argumenter</value></data>
+  <data name="SettingsLanguage"><value>Språk</value></data>
+  <data name="SettingsSave"><value>Lagre</value></data>
+  <data name="SettingsSaved"><value>Lagret {0}. Endringer gjelder fra neste oppstart.</value></data>
+  <data name="SettingsHostsEntryAdded"><value>La til oppføring i /etc/hosts.</value></data>
+  <data name="SettingsAddHostsEntry"><value>Legg til i /etc/hosts</value></data>
+  <data name="SettingsCheckAgain"><value>Sjekk på nytt</value></data>
+  <data name="SettingsHostUnresolvable"><value>Navnet «{0}» kan ikke slås opp. Tilkoblingen krever navn (ikke IP), så det må finnes i DNS eller i /etc/hosts.</value></data>
+
+  <data name="ErrorHostRequired"><value>Vertsmaskin (navn) må fylles ut.</value></data>
+  <data name="ErrorHostMustNotBeIpAddress"><value>Vertsmaskinen må oppgis som NAVN, ikke IP-adresse. Med IP kapper FreeRDP adressen ved første punktum, og Entra avviser innloggingen. Legg IP-en i feltet under i stedet.</value></data>
+  <data name="ErrorHostInvalidCharacters"><value>Vertsnavnet kan bare inneholde bokstaver, tall, bindestrek og punktum.</value></data>
+  <data name="ErrorHostIpInvalid"><value>«{0}» er ikke en gyldig IP-adresse.</value></data>
+  <data name="ErrorPortOutOfRange"><value>Port må være et tall mellom 1 og 65535 (standard for RDP er 3389).</value></data>
+  <data name="ErrorUserRequired"><value>Bruker (UPN) må fylles ut.</value></data>
+  <data name="ErrorUserNotUpn"><value>Bruker må være en full UPN, f.eks. deg@firma.no.</value></data>
+  <data name="ErrorVpnInterfaceTooLong"><value>VPN-interface kan være høyst 15 tegn (grensen for nettverksnavn i Linux).</value></data>
+  <data name="ErrorVpnInterfaceInvalidCharacters"><value>VPN-interface kan bare inneholde bokstaver, tall, bindestrek, understrek og punktum.</value></data>
+  <data name="ErrorHandshakeTimeoutOutOfRange"><value>Handshake-timeout må være mellom 5 og 600 sekunder.</value></data>
+  <data name="ErrorExtraArgsEmpty"><value>xfreerdp3-argumentene kan ikke være tomme.</value></data>
+  <data name="ErrorExtraArgsMissingAadFlag"><value>Argumentene må inneholde /sec:aad — det er eneste vei inn på en Entra-tilknyttet maskin.</value></data>
+
+  <data name="FailureHandshakeTimeout"><value>Fikk ikke handshake innen {0} sekunder. Ble push-varselet i UniFi Identity-appen godkjent? Prøv igjen med mobilen klar.</value></data>
+  <data name="FailureAutoCaptureUnavailable"><value>(Auto-fangst utilgjengelig: {0} Bruker manuell innliming.)</value></data>
+</root>

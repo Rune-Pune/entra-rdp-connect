@@ -12,59 +12,81 @@ public sealed record SettingsDraft(
     string HandshakeTimeout,
     string ExtraArgs);
 
+/// <summary>Hva som er galt med et felt. Kjernen navngir problemet; presentasjonslaget
+/// formulerer det på brukerens språk.</summary>
+public enum SettingsError
+{
+    HostRequired,
+    HostMustNotBeIpAddress,
+    HostInvalidCharacters,
+    HostIpInvalid,
+    PortOutOfRange,
+    UserRequired,
+    UserNotUpn,
+    VpnInterfaceTooLong,
+    VpnInterfaceInvalidCharacters,
+    HandshakeTimeoutOutOfRange,
+    ExtraArgsEmpty,
+    ExtraArgsMissingAadFlag,
+}
+
+/// <summary>Ett problem, med verdien som utløste det når den er verdt å vise.</summary>
+public sealed record ValidationIssue(SettingsError Error, string? Value = null);
+
 /// <summary>
 /// Validerer innstillingene før de lagres. Reglene er hentet fra feil vi faktisk har møtt —
 /// særlig at verten må oppgis som NAVN: skriver man en IP, kapper FreeRDP den ved første punktum
 /// og Entra svarer AADSTS293004, en feilmelding det er nær umulig å gjette seg fram fra.
 ///
+/// Returnerer koder, ikke tekst: kjernen skal verken kjenne språk eller ordlyd.
 /// Ren funksjon uten I/O, så reglene kan enhetstestes.
 /// </summary>
 public static class SettingsValidator
 {
-    public static IReadOnlyList<string> Validate(SettingsDraft draft)
+    /// <summary>Grensen for nettverksnavn i Linux (IFNAMSIZ minus null-terminatoren).</summary>
+    private const int MaxInterfaceNameLength = 15;
+
+    public static IReadOnlyList<ValidationIssue> Validate(SettingsDraft draft)
     {
-        var errors = new List<string>();
+        var issues = new List<ValidationIssue>();
 
         var host = draft.Host.Trim();
         if (host.Length == 0)
-            errors.Add("Vertsmaskin (navn) må fylles ut.");
+            issues.Add(new(SettingsError.HostRequired));
         else if (IPAddress.TryParse(host, out _))
-            errors.Add("Vertsmaskinen må oppgis som NAVN, ikke IP-adresse. Med IP kapper FreeRDP " +
-                       "adressen ved første punktum, og Entra avviser innloggingen. Legg IP-en i " +
-                       "feltet under i stedet.");
+            issues.Add(new(SettingsError.HostMustNotBeIpAddress));
         else if (!host.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '.'))
-            errors.Add("Vertsnavnet kan bare inneholde bokstaver, tall, bindestrek og punktum.");
+            issues.Add(new(SettingsError.HostInvalidCharacters));
 
         var ip = draft.HostIp.Trim();
         if (ip.Length > 0 && !IPAddress.TryParse(ip, out _))
-            errors.Add($"«{ip}» er ikke en gyldig IP-adresse.");
+            issues.Add(new(SettingsError.HostIpInvalid, ip));
 
         if (!int.TryParse(draft.Port.Trim(), out var port) || port is < 1 or > 65535)
-            errors.Add("Port må være et tall mellom 1 og 65535 (standard for RDP er 3389).");
+            issues.Add(new(SettingsError.PortOutOfRange));
 
         var user = draft.User.Trim();
         if (user.Length == 0)
-            errors.Add("Bruker (UPN) må fylles ut.");
+            issues.Add(new(SettingsError.UserRequired));
         else if (!user.Contains('@'))
-            errors.Add("Bruker må være en full UPN, f.eks. deg@firma.no.");
+            issues.Add(new(SettingsError.UserNotUpn));
 
         // Tomt interface er gyldig: da styrer ikke appen VPN, og går rett på RDP.
         var iface = draft.VpnInterface.Trim();
-        if (iface.Length > 15)
-            errors.Add("VPN-interface kan være høyst 15 tegn (grensen for nettverksnavn i Linux).");
+        if (iface.Length > MaxInterfaceNameLength)
+            issues.Add(new(SettingsError.VpnInterfaceTooLong));
         else if (!iface.All(c => char.IsAsciiLetterOrDigit(c) || c is '-' or '_' or '.'))
-            errors.Add("VPN-interface kan bare inneholde bokstaver, tall, bindestrek, understrek og punktum.");
+            issues.Add(new(SettingsError.VpnInterfaceInvalidCharacters));
 
         if (!int.TryParse(draft.HandshakeTimeout.Trim(), out var timeout) || timeout is < 5 or > 600)
-            errors.Add("Handshake-timeout må være mellom 5 og 600 sekunder.");
+            issues.Add(new(SettingsError.HandshakeTimeoutOutOfRange));
 
         var args = draft.ExtraArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (args.Length == 0)
-            errors.Add("xfreerdp3-argumentene kan ikke være tomme.");
+            issues.Add(new(SettingsError.ExtraArgsEmpty));
         else if (!args.Contains("/sec:aad"))
-            errors.Add("Argumentene må inneholde /sec:aad — det er eneste vei inn på en " +
-                       "Entra-tilknyttet maskin.");
+            issues.Add(new(SettingsError.ExtraArgsMissingAadFlag));
 
-        return errors;
+        return issues;
     }
 }
