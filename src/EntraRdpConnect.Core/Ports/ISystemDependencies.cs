@@ -15,6 +15,6 @@ public interface ISystemDependencies
     /// </summary>
     Task InstallAsync(
         IReadOnlyList<MissingDependency> dependencies,
-        IProgress<string>? log = null,
+        IProgress<InstallProgress>? log = null,
         CancellationToken ct = default);
 }

@@ -20,14 +20,14 @@ public static class DependencyChecker
 {
     public static readonly IReadOnlyList<Dependency> Required =
     [
-        new("xfreerdp3", "RDP-klient (FreeRDP 3)", Required: true, AptPackage: "freerdp3-x11"),
-        new("uwg-quick", "VPN opp/ned (UniFi Adaptive VPN)", Required: true),
-        new("uwg",       "VPN-status", Required: true),
-        new("pkexec",    "Grafisk privilegie-eskalering for VPN", Required: true, AptPackage: "pkexec"),
-        new("firefox",   "Nettleser for Entra-innlogging", Required: true, AptPackage: "firefox"),
-        new("script",    "Pseudo-terminal for xfreerdp3 AAD-innlogging", Required: true, AptPackage: "bsdutils"),
-        new("dig",       "DNS-oppslag mot gatewayen ved DHCP-endring", Required: false, AptPackage: "bind9-dnsutils"),
-        new("sqlite3",   "Lesing av nettleserhistorikk (fangst av OAuth-koden)", Required: false, AptPackage: "sqlite3"),
+        new("xfreerdp3", "RDP client (FreeRDP 3)", Required: true, AptPackage: "freerdp3-x11"),
+        new("uwg-quick", "VPN up/down (UniFi Adaptive VPN)", Required: true),
+        new("uwg",       "VPN status", Required: true),
+        new("pkexec",    "Graphical privilege escalation for the VPN", Required: true, AptPackage: "pkexec"),
+        new("firefox",   "Browser for the Entra sign-in", Required: true, AptPackage: "firefox"),
+        new("script",    "Pseudo-terminal for the xfreerdp3 AAD sign-in", Required: true, AptPackage: "bsdutils"),
+        new("dig",       "DNS lookup against the gateway on DHCP changes", Required: false, AptPackage: "bind9-dnsutils"),
+        new("sqlite3",   "Reading browser history (capturing the OAuth code)", Required: false, AptPackage: "sqlite3"),
     ];
 
     public static IReadOnlyList<DependencyResult> Check(IEnumerable<Dependency>? deps = null)

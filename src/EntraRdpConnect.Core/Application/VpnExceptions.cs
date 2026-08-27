@@ -27,6 +27,12 @@ public sealed class VpnCommandException : VpnException
 {
     public int ExitCode { get; }
 
-    public VpnCommandException(string message, int exitCode) : base(message)
-        => ExitCode = exitCode;
+    /// <summary>Årsaken, når den er kjent nok til å forklares på brukerens språk.</summary>
+    public CommandFailure Failure { get; }
+
+    public VpnCommandException(string message, CommandFailure failure, int exitCode) : base(message)
+    {
+        Failure = failure;
+        ExitCode = exitCode;
+    }
 }

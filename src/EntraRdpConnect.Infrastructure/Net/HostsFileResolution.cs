@@ -1,3 +1,4 @@
+using EntraRdpConnect.Core.Application;
 using System.Net;
 using EntraRdpConnect.Core.Ports;
 using EntraRdpConnect.Infrastructure.Processes;
@@ -38,13 +39,16 @@ public sealed class HostsFileResolution : IHostResolution
         if (result.Succeeded)
             return;
 
-        var reason = result.ExitCode switch
+        // Teknisk engelsk for logg og feilsøking; brukerens formulering velges ut fra CommandFailure.
+        var (failure, reason) = result.ExitCode switch
         {
-            126 => "passord-dialogen ble avbrutt",
-            127 => "pkexec ble ikke funnet",
-            _ => result.CombinedOutput.Trim() is { Length: > 0 } o ? o : "ukjent feil",
+            126 => (CommandFailure.PrivilegeDeclined, "the password dialog was dismissed"),
+            127 => (CommandFailure.CommandNotFound, "pkexec was not found"),
+            _ => (CommandFailure.Unknown,
+                result.CombinedOutput.Trim() is { Length: > 0 } o ? o : "unknown error"),
         };
-        throw new InvalidOperationException($"Klarte ikke å skrive til /etc/hosts: {reason}");
+        throw new PrivilegedCommandException(
+            $"Could not write to /etc/hosts: {reason}", failure, result.ExitCode);
     }
 
     /// <summary>Bygger og validerer hosts-linja. Avviser alt som ikke er en ren IP-adresse og et

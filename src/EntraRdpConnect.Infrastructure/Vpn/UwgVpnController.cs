@@ -45,14 +45,17 @@ public sealed class UwgVpnController : IVpnController
         if (result.Succeeded)
             return;
 
-        var reason = result.ExitCode switch
+        // Teknisk engelsk for logg og feilsøking; brukerens formulering velges ut fra CommandFailure.
+        var (failure, reason) = result.ExitCode switch
         {
-            126 => "passord-dialogen ble avbrutt eller ikke godkjent",
-            127 => "pkexec eller uwg-quick ble ikke funnet",
-            _ => result.CombinedOutput.Trim() is { Length: > 0 } output ? output : "ukjent feil",
+            126 => (CommandFailure.PrivilegeDeclined, "the password dialog was dismissed or not approved"),
+            127 => (CommandFailure.CommandNotFound, "pkexec or uwg-quick was not found"),
+            _ => (CommandFailure.Unknown,
+                result.CombinedOutput.Trim() is { Length: > 0 } output ? output : "unknown error"),
         };
         throw new VpnCommandException(
-            $"'uwg-quick {direction} {_interface}' feilet (exit {result.ExitCode}): {reason}",
+            $"'uwg-quick {direction} {_interface}' failed (exit {result.ExitCode}): {reason}",
+            failure,
             result.ExitCode);
     }
 }

@@ -124,4 +124,11 @@
   <!-- Failure messages built from exceptions -->
   <data name="FailureHandshakeTimeout"><value>No handshake within {0} seconds. Was the push notification in the UniFi Identity app approved? Try again with your phone ready.</value></data>
   <data name="FailureAutoCaptureUnavailable"><value>(Automatic capture unavailable: {0} Using manual entry.)</value></data>
+  <!-- Dependency installation -->
+  <data name="InstallNothingInstallable"><value>None of the tools can be installed automatically.</value></data>
+  <data name="InstallInstalling"><value>Installing: {0} (approve the password dialog)…</value></data>
+  <data name="InstallCompleted"><value>✓ Installation finished.</value></data>
+  <data name="FailurePrivilegeDeclined"><value>The password dialog was dismissed. The operation needs administrator rights to continue.</value></data>
+  <data name="FailureCommandNotFound"><value>A required system tool was not found. Check the dependencies in the Connection tab.</value></data>
+  <data name="FailurePackageManagerFailed"><value>apt could not install the packages. Try running “sudo apt update” in a terminal first.</value></data>
 </root>

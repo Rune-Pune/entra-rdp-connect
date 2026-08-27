@@ -90,7 +90,7 @@ public sealed class ProcessRunner : IAsyncDisposable
     public async Task WriteStdinLineAsync(string line, CancellationToken ct = default)
     {
         if (!_redirectStdin)
-            throw new InvalidOperationException("Stdin er ikke omdirigert for denne prosessen.");
+            throw new InvalidOperationException("Stdin is not redirected for this process.");
 
         await _process.StandardInput.WriteLineAsync(line.AsMemory(), ct).ConfigureAwait(false);
         await _process.StandardInput.FlushAsync(ct).ConfigureAwait(false);

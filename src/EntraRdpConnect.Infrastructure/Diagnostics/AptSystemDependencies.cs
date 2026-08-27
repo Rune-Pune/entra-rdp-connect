@@ -1,3 +1,4 @@
+using EntraRdpConnect.Core.Application;
 using EntraRdpConnect.Core.Domain;
 using EntraRdpConnect.Core.Ports;
 using EntraRdpConnect.Infrastructure.Processes;
@@ -31,7 +32,7 @@ public sealed class AptSystemDependencies : ISystemDependencies
 
     public async Task InstallAsync(
         IReadOnlyList<MissingDependency> dependencies,
-        IProgress<string>? log = null,
+        IProgress<InstallProgress>? log = null,
         CancellationToken ct = default)
     {
         // Oversett kommandonavn -> pakkenavn fra VÅR liste, ikke fra det som ble sendt inn.
@@ -43,11 +44,11 @@ public sealed class AptSystemDependencies : ISystemDependencies
 
         if (packages.Count == 0)
         {
-            log?.Report("Ingen av verktøyene kan installeres automatisk.");
+            log?.Report(InstallProgress.NothingInstallable);
             return;
         }
 
-        log?.Report($"Installerer: {string.Join(", ", packages)} (godkjenn passord-dialogen)…");
+        log?.Report(InstallProgress.Installing(packages!));
 
         var args = new List<string> { "apt-get", "install", "-y" };
         args.AddRange(packages!);
@@ -58,17 +59,23 @@ public sealed class AptSystemDependencies : ISystemDependencies
 
         if (result.Succeeded)
         {
-            log?.Report("✓ Installasjonen er ferdig.");
+            log?.Report(InstallProgress.Completed);
             return;
         }
 
-        var reason = result.ExitCode switch
+        // Teknisk engelsk for logg og feilsøking; brukerens formulering ligger i ressursene og
+        // velges ut fra CommandFailure.
+        var (failure, reason) = result.ExitCode switch
         {
-            126 => "passord-dialogen ble avbrutt",
-            127 => "pkexec ble ikke funnet",
-            100 => "apt feilet — prøv «sudo apt update» i en terminal først",
-            _ => result.CombinedOutput.Trim() is { Length: > 0 } o ? o[^Math.Min(300, o.Length)..] : "ukjent feil",
+            126 => (CommandFailure.PrivilegeDeclined, "the password dialog was dismissed"),
+            127 => (CommandFailure.CommandNotFound, "pkexec was not found"),
+            100 => (CommandFailure.PackageManagerFailed, "apt failed"),
+            _ => (CommandFailure.Unknown,
+                result.CombinedOutput.Trim() is { Length: > 0 } o ? o[^Math.Min(300, o.Length)..] : "unknown error"),
         };
-        throw new InvalidOperationException($"Installasjonen feilet (exit {result.ExitCode}): {reason}");
+        throw new PrivilegedCommandException(
+            $"Installing {string.Join(", ", packages)} failed (exit {result.ExitCode}): {reason}",
+            failure,
+            result.ExitCode);
     }
 }

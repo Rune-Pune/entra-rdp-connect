@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EntraRdpConnect.Core.Application;
 using EntraRdpConnect.App.Localization;
+using EntraRdpConnect.Core.Domain;
 using EntraRdpConnect.Core.Ports;
 
 namespace EntraRdpConnect.App.ViewModels;
@@ -74,7 +75,7 @@ public partial class ConnectionViewModel : ViewModelBase
         if (_dependencies is null) return;
 
         CanInstallDependencies = false;
-        var log = new Progress<string>(AppendLog);
+        var log = new Progress<InstallProgress>(p => AppendLog(Describe(p)));
         try
         {
             await _dependencies.InstallAsync(_dependencies.FindMissing(), log);
@@ -214,10 +215,24 @@ public partial class ConnectionViewModel : ViewModelBase
     private void AppendLog(string line) => Log.Add($"{DateTime.Now:HH:mm:ss}  {line}");
 
     /// <summary>Unntakene bærer tekniske engelske meldinger; her formuleres de på brukerens språk.</summary>
+    /// <summary>
+    /// Brukerens formulering av en feil. Kjernen og adapterne bærer tekniske engelske meldinger;
+    /// her velges teksten ut fra typen og dataene unntaket bærer. Faller tilbake på den tekniske
+    /// meldingen når vi ikke har noe bedre å si — bedre enn en tom boks.
+    /// </summary>
     private static string Describe(Exception ex) => ex switch
     {
         VpnHandshakeTimeoutException t => L.Format("FailureHandshakeTimeout", t.Timeout.TotalSeconds.ToString("0")),
+        VpnCommandException { Failure: not CommandFailure.Unknown } c => L[$"Failure{c.Failure}"],
+        PrivilegedCommandException { Failure: not CommandFailure.Unknown } p => L[$"Failure{p.Failure}"],
         _ => ex.Message,
+    };
+
+    private static string Describe(InstallProgress p) => p.Stage switch
+    {
+        InstallStage.Installing => L.Format("InstallInstalling", string.Join(", ", p.Packages)),
+        InstallStage.Completed => L["InstallCompleted"],
+        _ => L["InstallNothingInstallable"],
     };
 
 }

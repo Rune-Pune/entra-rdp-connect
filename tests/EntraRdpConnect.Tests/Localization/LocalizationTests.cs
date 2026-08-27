@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using EntraRdpConnect.Core.Application;
+using EntraRdpConnect.Core.Domain;
 using Xunit;
 
 namespace EntraRdpConnect.Tests.Localization;
@@ -37,17 +38,27 @@ public sealed class LocalizationTests
         Assert.True(extra.Length == 0, "Nøkler uten engelsk motstykke: " + string.Join(", ", extra));
     }
 
-    [Fact]
-    public void Hver_valideringsfeil_har_en_tekst()
+    /// <summary>
+    /// Kodene presentasjonslaget slår opp tekst for, og prefikset de bruker. En ny verdi i en av
+    /// disse enum-ene uten tilhørende ressurs ville vist «!FailureXyz!» i grensesnittet.
+    /// </summary>
+    public static TheoryData<string, string[]> CodesNeedingText => new()
     {
-        // Uten dette ville en ny SettingsError vist «!ErrorXyz!» i grensesnittet.
-        var keys = KeysIn("Strings.resx");
-        var missing = Enum.GetNames<SettingsError>()
-            .Select(name => "Error" + name)
-            .Where(key => !keys.Contains(key))
-            .ToArray();
+        { "Error", Enum.GetNames<SettingsError>() },
+        { "Install", Enum.GetNames<InstallStage>() },
+        // Unknown er bevisst utelatt: da finnes det ingen forklaring å gi, og
+        // presentasjonslaget faller tilbake på den tekniske meldingen fra unntaket.
+        { "Failure", [.. Enum.GetNames<CommandFailure>().Where(n => n != nameof(CommandFailure.Unknown))] },
+    };
 
-        Assert.True(missing.Length == 0, "Valideringsfeil uten tekst: " + string.Join(", ", missing));
+    [Theory]
+    [MemberData(nameof(CodesNeedingText))]
+    public void Hver_kode_presentasjonslaget_slaar_opp_har_en_tekst(string prefix, string[] names)
+    {
+        var keys = KeysIn("Strings.resx");
+        var missing = names.Select(name => prefix + name).Where(key => !keys.Contains(key)).ToArray();
+
+        Assert.True(missing.Length == 0, "Koder uten tekst: " + string.Join(", ", missing));
     }
 
     private static string FindRepoRoot()

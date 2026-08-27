@@ -31,7 +31,7 @@ public sealed class FileConfigProvider : IConfigProvider
     {
         if (!File.Exists(_path))
             throw new FileNotFoundException(
-                $"Fant ingen config på {_path}. Kopier config.sample.json dit og fyll inn verdier.", _path);
+                $"No configuration found at {_path}. Copy config.sample.json there and fill in the values.", _path);
 
         await using var stream = File.OpenRead(_path);
         return await JsonSerializer.DeserializeAsync<AppConfig>(stream, JsonOptions, ct).ConfigureAwait(false)

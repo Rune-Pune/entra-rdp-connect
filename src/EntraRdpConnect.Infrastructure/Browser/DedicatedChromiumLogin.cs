@@ -49,7 +49,7 @@ public sealed class DedicatedChromiumLogin
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-        }) ?? throw new InvalidOperationException($"Klarte ikke å starte {_browser}.");
+        }) ?? throw new InvalidOperationException($"Could not start {_browser}.");
 
         // Drener nettleserens egen støy vekk fra terminalen.
         browser.OutputDataReceived += static (_, _) => { };

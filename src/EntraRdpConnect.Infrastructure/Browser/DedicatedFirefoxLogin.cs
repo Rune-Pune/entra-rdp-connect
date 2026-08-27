@@ -35,7 +35,7 @@ public sealed class DedicatedFirefoxLogin
             UseShellExecute = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
-        }) ?? throw new InvalidOperationException("Klarte ikke å starte Firefox.");
+        }) ?? throw new InvalidOperationException("Could not start Firefox.");
 
         // Drener Firefox' egen GTK-/snap-støy vekk fra terminalen vår (og hindrer at pipa fylles).
         firefox.OutputDataReceived += static (_, _) => { };

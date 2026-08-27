@@ -115,4 +115,10 @@
 
   <data name="FailureHandshakeTimeout"><value>Fikk ikke handshake innen {0} sekunder. Ble push-varselet i UniFi Identity-appen godkjent? Prøv igjen med mobilen klar.</value></data>
   <data name="FailureAutoCaptureUnavailable"><value>(Auto-fangst utilgjengelig: {0} Bruker manuell innliming.)</value></data>
+  <data name="InstallNothingInstallable"><value>Ingen av verktøyene kan installeres automatisk.</value></data>
+  <data name="InstallInstalling"><value>Installerer: {0} (godkjenn passord-dialogen)…</value></data>
+  <data name="InstallCompleted"><value>✓ Installasjonen er ferdig.</value></data>
+  <data name="FailurePrivilegeDeclined"><value>Passord-dialogen ble avbrutt. Handlingen trenger administratorrettigheter for å fortsette.</value></data>
+  <data name="FailureCommandNotFound"><value>Et nødvendig systemverktøy ble ikke funnet. Sjekk avhengighetene i Tilkobling-fanen.</value></data>
+  <data name="FailurePackageManagerFailed"><value>apt klarte ikke å installere pakkene. Prøv «sudo apt update» i en terminal først.</value></data>
 </root>
