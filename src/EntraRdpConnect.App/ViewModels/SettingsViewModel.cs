@@ -1,3 +1,4 @@
+using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EntraRdpConnect.App.Localization;
@@ -22,11 +23,11 @@ public partial class SettingsViewModel : ViewModelBase
 
         Host = config.Rdp.Host;
         HostIp = config.Rdp.HostIp;
-        Port = config.Rdp.Port.ToString();
+        Port = config.Rdp.Port.ToString(CultureInfo.InvariantCulture);
         User = config.Rdp.User;
         ExtraArgs = string.Join(' ', config.Rdp.ExtraArgs);
         VpnInterface = config.Vpn.Interface;
-        HandshakeTimeout = config.Vpn.HandshakeTimeoutSeconds.ToString();
+        HandshakeTimeout = config.Vpn.HandshakeTimeoutSeconds.ToString(CultureInfo.InvariantCulture);
         SelectedLanguage = Localizer.Languages.FirstOrDefault(l => l.Code == config.Language)
                            ?? Localizer.Languages[0];
 
@@ -78,8 +79,8 @@ public partial class SettingsViewModel : ViewModelBase
 
         ValidationErrors = null;
 
-        var port = int.Parse(Port.Trim());
-        var timeout = int.Parse(HandshakeTimeout.Trim());
+        var port = int.Parse(Port.Trim(), CultureInfo.InvariantCulture);
+        var timeout = int.Parse(HandshakeTimeout.Trim(), CultureInfo.InvariantCulture);
         var args = ExtraArgs.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
         _current = _current with
@@ -97,7 +98,7 @@ public partial class SettingsViewModel : ViewModelBase
         };
 
         await _provider.SaveAsync(_current);
-        SavedMessage = L.Format("SettingsSaved", DateTime.Now.ToString("HH:mm"));
+        SavedMessage = L.Format("SettingsSaved", DateTime.Now.ToString("HH:mm", Localizer.Culture));
         await CheckHostAsync();
     }
 

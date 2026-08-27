@@ -1,0 +1,34 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+
+[*.{cs,axaml,csproj,props}]
+indent_size = 4
+
+[*.{yml,yaml,json}]
+indent_size = 2
+
+[*.cs]
+
+# CA1859 wants concrete types where an interface is used, for performance. Here the
+# interface IS the design: the core talks to ports, and swapping an adapter is the
+# point of the architecture. A few virtual calls per connection is not a cost worth
+# trading it for.
+dotnet_diagnostic.CA1859.severity = none
+
+# CA1822 wants members that touch no instance state marked static. That breaks MVVM:
+# view model properties are bound by name from XAML, and this project uses reflection
+# bindings (x:CompileBindings="False"), so a static member fails the binding silently
+# at runtime rather than at build time. Not worth the risk for a stack slot.
+dotnet_diagnostic.CA1822.severity = none
+
+[tests/**.cs]
+
+# Test names are sentences describing behaviour, with underscores for readability —
+# Kobler_til_naar_handshake_kommer_etter_noen_poll. That is a deliberate xUnit
+# convention and reads far better in test output than PascalCase would.
+dotnet_diagnostic.CA1707.severity = none
