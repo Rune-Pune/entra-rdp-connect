@@ -70,104 +70,104 @@
                          as one block so the eye lands on the answer in one place. -->
                     <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="18">
 
-                    <!-- The rail answers "where am I, and is it waiting for me?" before the
-                         sentence below it has been read. -->
-                    <ItemsControl ItemsSource="{Binding Steps}" Margin="6,0,6,6">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Rows="1"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Spacing="8">
-                                    <Border Classes="pip"
-                                            Classes.current="{Binding IsCurrent}"
-                                            Classes.needsYou="{Binding NeedsYou}"
-                                            Classes.done="{Binding IsDone}"
-                                            HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding Label}"
-                                               Classes="stepLabel"
-                                               Classes.lit="{Binding IsLit}"
-                                               Classes.needsYou="{Binding NeedsYou}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                        <!-- The rail answers "where am I, and is it waiting for me?" before the
+                             sentence below it has been read. -->
+                        <ItemsControl ItemsSource="{Binding Steps}" Margin="6,0,6,6">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Spacing="8">
+                                        <Border Classes="pip"
+                                                Classes.current="{Binding IsCurrent}"
+                                                Classes.needsYou="{Binding NeedsYou}"
+                                                Classes.done="{Binding IsDone}"
+                                                HorizontalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Label}"
+                                                   Classes="stepLabel"
+                                                   Classes.lit="{Binding IsLit}"
+                                                   Classes.needsYou="{Binding NeedsYou}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                    <StackPanel Spacing="16">
+                        <StackPanel Spacing="16">
 
-                        <Panel HorizontalAlignment="Center">
-                            <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource QuietBg}"
-                                    IsVisible="{Binding IsIdle}">
-                                <PathIcon Data="{StaticResource IconPlug}" Width="24" Height="24"
-                                          Foreground="{DynamicResource MutedFg}"/>
-                            </Border>
-                            <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource OkBg}"
-                                    IsVisible="{Binding IsConnected}">
-                                <PathIcon Data="{StaticResource IconCheck}" Width="24" Height="24"
-                                          Foreground="{DynamicResource OkFg}"/>
-                            </Border>
-                            <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource BadBg}"
-                                    IsVisible="{Binding HasFailed}">
-                                <PathIcon Data="{StaticResource IconWarn}" Width="24" Height="24"
-                                          Foreground="{DynamicResource BadFg}"/>
-                            </Border>
-                        </Panel>
+                            <Panel HorizontalAlignment="Center">
+                                <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource QuietBg}"
+                                        IsVisible="{Binding IsIdle}">
+                                    <PathIcon Data="{StaticResource IconPlug}" Width="24" Height="24"
+                                              Foreground="{DynamicResource MutedFg}"/>
+                                </Border>
+                                <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource OkBg}"
+                                        IsVisible="{Binding IsConnected}">
+                                    <PathIcon Data="{StaticResource IconCheck}" Width="24" Height="24"
+                                              Foreground="{DynamicResource OkFg}"/>
+                                </Border>
+                                <Border Width="52" Height="52" CornerRadius="26" Background="{DynamicResource BadBg}"
+                                        IsVisible="{Binding HasFailed}">
+                                    <PathIcon Data="{StaticResource IconWarn}" Width="24" Height="24"
+                                              Foreground="{DynamicResource BadFg}"/>
+                                </Border>
+                            </Panel>
 
-                        <StackPanel Spacing="5">
-                            <TextBlock Text="{Binding StatusTitle}" FontSize="21" FontWeight="SemiBold"
-                                       HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
-                            <TextBlock Text="{Binding StatusSubtitle}" Foreground="{DynamicResource MutedFg}"
-                                       FontSize="13" HorizontalAlignment="Center" TextAlignment="Center"
-                                       TextWrapping="Wrap"
-                                       IsVisible="{Binding StatusSubtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
-                        </StackPanel>
-
-                        <!-- The only saturated colour on the screen, and it means exactly one
-                             thing: this is waiting for you, not for the machine. -->
-                        <Border IsVisible="{Binding ShowHumanMoment}" Background="{DynamicResource SignalBg}"
-                                CornerRadius="8" Padding="15,14">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <Panel VerticalAlignment="Center">
-                                    <PathIcon Data="{StaticResource IconPhone}" Width="21" Height="21"
-                                              Foreground="{DynamicResource SignalFg}"
-                                              IsVisible="{Binding HumanMomentIsPush}"/>
-                                    <PathIcon Data="{StaticResource IconWeb}" Width="21" Height="21"
-                                              Foreground="{DynamicResource SignalFg}"
-                                              IsVisible="{Binding !HumanMomentIsPush}"/>
-                                </Panel>
-                                <TextBlock Grid.Column="1" Text="{Binding HumanMoment}"
-                                           Foreground="{DynamicResource SignalFg}"
-                                           FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"
-                                           VerticalAlignment="Center" Margin="12,0,0,0"/>
-                            </Grid>
-                        </Border>
-
-                        <Border IsVisible="{Binding ManualPrompt.IsAwaiting}"
-                                Background="{DynamicResource SignalBg}" CornerRadius="8" Padding="15,14">
-                            <StackPanel DataContext="{Binding ManualPrompt}" Spacing="10">
-                                <TextBlock Foreground="{DynamicResource SignalFg}" TextWrapping="Wrap" FontSize="12"
-                                           Text="{Binding [ManualCodeInstructions], Source={x:Static loc:Localizer.Instance}}"/>
-                                <TextBox Text="{Binding PastedUrl, Mode=TwoWay}"
-                                         PlaceholderText="{Binding [ManualCodePlaceholder], Source={x:Static loc:Localizer.Instance}}"/>
-                                <TextBlock Text="{Binding Error}"
-                                           IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           Foreground="{DynamicResource BadFg}" FontSize="11" TextWrapping="Wrap"/>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Button Content="{Binding [ManualCodeSubmit], Source={x:Static loc:Localizer.Instance}}"
-                                            Command="{Binding SubmitCommand}" Classes="inline"
-                                            BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
-                                    <Button Content="{Binding [ManualCodeReopen], Source={x:Static loc:Localizer.Instance}}"
-                                            Command="{Binding OpenLinkCommand}" Classes="inline"
-                                            BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
-                                </StackPanel>
+                            <StackPanel Spacing="5">
+                                <TextBlock Text="{Binding StatusTitle}" FontSize="21" FontWeight="SemiBold"
+                                           HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding StatusSubtitle}" Foreground="{DynamicResource MutedFg}"
+                                           FontSize="13" HorizontalAlignment="Center" TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding StatusSubtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                             </StackPanel>
-                        </Border>
 
-                        <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"
-                                     Foreground="{DynamicResource MutedFg}"/>
-                    </StackPanel>
+                            <!-- The only saturated colour on the screen, and it means exactly one
+                                 thing: this is waiting for you, not for the machine. -->
+                            <Border IsVisible="{Binding ShowHumanMoment}" Background="{DynamicResource SignalBg}"
+                                    CornerRadius="8" Padding="15,14">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Panel VerticalAlignment="Center">
+                                        <PathIcon Data="{StaticResource IconPhone}" Width="21" Height="21"
+                                                  Foreground="{DynamicResource SignalFg}"
+                                                  IsVisible="{Binding HumanMomentIsPush}"/>
+                                        <PathIcon Data="{StaticResource IconWeb}" Width="21" Height="21"
+                                                  Foreground="{DynamicResource SignalFg}"
+                                                  IsVisible="{Binding !HumanMomentIsPush}"/>
+                                    </Panel>
+                                    <TextBlock Grid.Column="1" Text="{Binding HumanMoment}"
+                                               Foreground="{DynamicResource SignalFg}"
+                                               FontSize="13" FontWeight="SemiBold" TextWrapping="Wrap"
+                                               VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                </Grid>
+                            </Border>
+
+                            <Border IsVisible="{Binding ManualPrompt.IsAwaiting}"
+                                    Background="{DynamicResource SignalBg}" CornerRadius="8" Padding="15,14">
+                                <StackPanel DataContext="{Binding ManualPrompt}" Spacing="10">
+                                    <TextBlock Foreground="{DynamicResource SignalFg}" TextWrapping="Wrap" FontSize="12"
+                                               Text="{Binding [ManualCodeInstructions], Source={x:Static loc:Localizer.Instance}}"/>
+                                    <TextBox Text="{Binding PastedUrl, Mode=TwoWay}"
+                                             PlaceholderText="{Binding [ManualCodePlaceholder], Source={x:Static loc:Localizer.Instance}}"/>
+                                    <TextBlock Text="{Binding Error}"
+                                               IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                               Foreground="{DynamicResource BadFg}" FontSize="11" TextWrapping="Wrap"/>
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Button Content="{Binding [ManualCodeSubmit], Source={x:Static loc:Localizer.Instance}}"
+                                                Command="{Binding SubmitCommand}" Classes="inline"
+                                                BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
+                                        <Button Content="{Binding [ManualCodeReopen], Source={x:Static loc:Localizer.Instance}}"
+                                                Command="{Binding OpenLinkCommand}" Classes="inline"
+                                                BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}" Height="3"
+                                         Foreground="{DynamicResource MutedFg}"/>
+                        </StackPanel>
 
                     </StackPanel>
 
@@ -226,148 +226,148 @@
                      saving. -->
                 <Grid DataContext="{Binding Settings}" RowDefinitions="*,Auto">
 
-                <!-- Without disabling the horizontal bar the ScrollViewer measures its child at
-                     unbounded width, so nothing inside ever wraps and the long sentences run off
-                     the right edge instead. -->
-                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled">
-                    <!-- The label column sizes itself to the longest translation instead of a
-                         fixed width, so Norwegian does not clip. -->
-                    <Grid Margin="14,14,14,12"
-                          ColumnDefinitions="Auto,*"
-                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <!-- Without disabling the horizontal bar the ScrollViewer measures its child at
+                         unbounded width, so nothing inside ever wraps and the long sentences run off
+                         the right edge instead. -->
+                    <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled">
+                        <!-- The label column sizes itself to the longest translation instead of a
+                             fixed width, so Norwegian does not clip. -->
+                        <Grid Margin="14,14,14,12"
+                              ColumnDefinitions="Auto,*"
+                              RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
-                        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource QuietBg}"
-                                CornerRadius="8" Padding="13,12" Margin="0,0,0,4">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <PathIcon Data="{StaticResource IconShield}" Width="16" Height="16"
-                                          Foreground="{DynamicResource MutedFg}" VerticalAlignment="Top"/>
-                                <TextBlock Grid.Column="1" Foreground="{DynamicResource MutedFg}"
-                                           TextWrapping="Wrap" FontSize="12" Margin="11,0,0,0"
-                                           Text="{Binding [SettingsNoPasswordsStored], Source={x:Static loc:Localizer.Instance}}"/>
+                            <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource QuietBg}"
+                                    CornerRadius="8" Padding="13,12" Margin="0,0,0,4">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <PathIcon Data="{StaticResource IconShield}" Width="16" Height="16"
+                                              Foreground="{DynamicResource MutedFg}" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Column="1" Foreground="{DynamicResource MutedFg}"
+                                               TextWrapping="Wrap" FontSize="12" Margin="11,0,0,0"
+                                               Text="{Binding [SettingsNoPasswordsStored], Source={x:Static loc:Localizer.Instance}}"/>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding HasHostProblem}"
+                                    Background="{DynamicResource SignalBg}" CornerRadius="8"
+                                    Padding="13,12" Margin="0,8,0,0">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <PathIcon Data="{StaticResource IconWarn}" Width="16" Height="16"
+                                                  Foreground="{DynamicResource SignalFg}" VerticalAlignment="Top"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding HostProblem}"
+                                                   Foreground="{DynamicResource SignalFg}"
+                                                   TextWrapping="Wrap" FontSize="12" Margin="11,0,0,0"/>
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Button Content="{Binding [SettingsAddHostsEntry], Source={x:Static loc:Localizer.Instance}}"
+                                                Command="{Binding AddHostsEntryCommand}" Classes="inline"
+                                                BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
+                                        <Button Content="{Binding [SettingsCheckAgain], Source={x:Static loc:Localizer.Instance}}"
+                                                Command="{Binding CheckHostCommand}" Classes="inline"
+                                                BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
+                                <TextBlock Classes="groupLabel"
+                                           Text="{Binding [SettingsGroupTarget], Source={x:Static loc:Localizer.Instance}}"/>
+                                <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
+                                           Margin="10,0,0,0" VerticalAlignment="Center"/>
                             </Grid>
-                        </Border>
 
-                        <Border Grid.Row="1" Grid.ColumnSpan="2" IsVisible="{Binding HasHostProblem}"
-                                Background="{DynamicResource SignalBg}" CornerRadius="8"
-                                Padding="13,12" Margin="0,8,0,0">
-                            <StackPanel Spacing="10">
+                            <TextBlock Grid.Row="3" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsHost], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Host}" Margin="0,3"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsHostIp], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding HostIp}" Margin="0,3"
+                                     ToolTip.Tip="{Binding [SettingsHostIpHint], Source={x:Static loc:Localizer.Instance}}"/>
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsUser], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding User}" Margin="0,3"/>
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsPort], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Port}" Margin="0,3"/>
+
+                            <Grid Grid.Row="7" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
+                                <TextBlock Classes="groupLabel"
+                                           Text="{Binding [SettingsGroupTunnel], Source={x:Static loc:Localizer.Instance}}"/>
+                                <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
+                                           Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Grid.Row="8" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsVpnInterface], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding VpnInterface}" Margin="0,3"/>
+
+                            <TextBlock Grid.Row="9" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsHandshakeTimeout], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding HandshakeTimeout}" Margin="0,3"/>
+
+                            <Grid Grid.Row="10" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
+                                <TextBlock Classes="groupLabel"
+                                           Text="{Binding [SettingsGroupRemoteDesktop], Source={x:Static loc:Localizer.Instance}}"/>
+                                <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
+                                           Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Grid.Row="11" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsExtraArgs], Source={x:Static loc:Localizer.Instance}}"/>
+                            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding ExtraArgs}" Margin="0,3"/>
+
+                            <Grid Grid.Row="12" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
+                                <TextBlock Classes="groupLabel"
+                                           Text="{Binding [SettingsGroupApp], Source={x:Static loc:Localizer.Instance}}"/>
+                                <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
+                                           Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Grid.Row="13" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
+                                       Text="{Binding [SettingsLanguage], Source={x:Static loc:Localizer.Instance}}"/>
+                            <ComboBox Grid.Row="13" Grid.Column="1" ItemsSource="{Binding Languages}"
+                                      SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                                      HorizontalAlignment="Stretch" Margin="0,3" FontSize="12.5">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+
+                            <Border Grid.Row="14" Grid.ColumnSpan="2" IsVisible="{Binding HasValidationErrors}"
+                                    Background="{DynamicResource BadBg}" CornerRadius="8"
+                                    Padding="13,12" Margin="0,16,0,0">
                                 <Grid ColumnDefinitions="Auto,*">
                                     <PathIcon Data="{StaticResource IconWarn}" Width="16" Height="16"
-                                              Foreground="{DynamicResource SignalFg}" VerticalAlignment="Top"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding HostProblem}"
-                                               Foreground="{DynamicResource SignalFg}"
+                                              Foreground="{DynamicResource BadFg}" VerticalAlignment="Top"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding ValidationErrors}"
+                                               Foreground="{DynamicResource BadFg}"
                                                TextWrapping="Wrap" FontSize="12" Margin="11,0,0,0"/>
                                 </Grid>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Button Content="{Binding [SettingsAddHostsEntry], Source={x:Static loc:Localizer.Instance}}"
-                                            Command="{Binding AddHostsEntryCommand}" Classes="inline"
-                                            BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
-                                    <Button Content="{Binding [SettingsCheckAgain], Source={x:Static loc:Localizer.Instance}}"
-                                            Command="{Binding CheckHostCommand}" Classes="inline"
-                                            BorderBrush="{DynamicResource SignalFg}" Foreground="{DynamicResource SignalFg}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                            </Border>
 
-                        <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
-                            <TextBlock Classes="groupLabel"
-                                       Text="{Binding [SettingsGroupTarget], Source={x:Static loc:Localizer.Instance}}"/>
-                            <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </Grid>
+                    </ScrollViewer>
 
-                        <TextBlock Grid.Row="3" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsHost], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Host}" Margin="0,3"/>
-
-                        <TextBlock Grid.Row="4" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsHostIp], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding HostIp}" Margin="0,3"
-                                 ToolTip.Tip="{Binding [SettingsHostIpHint], Source={x:Static loc:Localizer.Instance}}"/>
-
-                        <TextBlock Grid.Row="5" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsUser], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding User}" Margin="0,3"/>
-
-                        <TextBlock Grid.Row="6" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsPort], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Port}" Margin="0,3"/>
-
-                        <Grid Grid.Row="7" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
-                            <TextBlock Classes="groupLabel"
-                                       Text="{Binding [SettingsGroupTunnel], Source={x:Static loc:Localizer.Instance}}"/>
-                            <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <!-- The confirmation is a full sentence — "Saved 08:12. Changes take effect on
+                         next start." — so it gets a column to wrap in rather than a place in a
+                         horizontal StackPanel, which would measure it unbounded and run it off. -->
+                    <Border Grid.Row="1" Background="{DynamicResource AppBg}"
+                            BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0"
+                            Padding="14,12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="{Binding SavedMessage}" VerticalAlignment="Center"
+                                       FontSize="12" TextWrapping="Wrap" Margin="0,0,12,0"
+                                       Foreground="{DynamicResource MutedFg}"/>
+                            <Button Grid.Column="1"
+                                    Content="{Binding [SettingsSave], Source={x:Static loc:Localizer.Instance}}"
+                                    Command="{Binding SaveCommand}" Classes="primary" Padding="22,10"/>
                         </Grid>
-
-                        <TextBlock Grid.Row="8" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsVpnInterface], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding VpnInterface}" Margin="0,3"/>
-
-                        <TextBlock Grid.Row="9" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsHandshakeTimeout], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding HandshakeTimeout}" Margin="0,3"/>
-
-                        <Grid Grid.Row="10" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
-                            <TextBlock Classes="groupLabel"
-                                       Text="{Binding [SettingsGroupRemoteDesktop], Source={x:Static loc:Localizer.Instance}}"/>
-                            <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <TextBlock Grid.Row="11" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsExtraArgs], Source={x:Static loc:Localizer.Instance}}"/>
-                        <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding ExtraArgs}" Margin="0,3"/>
-
-                        <Grid Grid.Row="12" Grid.ColumnSpan="2" ColumnDefinitions="Auto,*" Margin="0,18,0,8">
-                            <TextBlock Classes="groupLabel"
-                                       Text="{Binding [SettingsGroupApp], Source={x:Static loc:Localizer.Instance}}"/>
-                            <Rectangle Grid.Column="1" Height="1" Fill="{DynamicResource LineBrush}"
-                                       Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </Grid>
-
-                        <TextBlock Grid.Row="13" Grid.Column="0" Classes="fieldLabel" Margin="0,0,12,0"
-                                   Text="{Binding [SettingsLanguage], Source={x:Static loc:Localizer.Instance}}"/>
-                        <ComboBox Grid.Row="13" Grid.Column="1" ItemsSource="{Binding Languages}"
-                                  SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
-                                  HorizontalAlignment="Stretch" Margin="0,3" FontSize="12.5">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-
-                        <Border Grid.Row="14" Grid.ColumnSpan="2" IsVisible="{Binding HasValidationErrors}"
-                                Background="{DynamicResource BadBg}" CornerRadius="8"
-                                Padding="13,12" Margin="0,16,0,0">
-                            <Grid ColumnDefinitions="Auto,*">
-                                <PathIcon Data="{StaticResource IconWarn}" Width="16" Height="16"
-                                          Foreground="{DynamicResource BadFg}" VerticalAlignment="Top"/>
-                                <TextBlock Grid.Column="1" Text="{Binding ValidationErrors}"
-                                           Foreground="{DynamicResource BadFg}"
-                                           TextWrapping="Wrap" FontSize="12" Margin="11,0,0,0"/>
-                            </Grid>
-                        </Border>
-
-                    </Grid>
-                </ScrollViewer>
-
-                <!-- The confirmation is a full sentence — "Saved 08:12. Changes take effect on
-                     next start." — so it gets a column to wrap in rather than a place in a
-                     horizontal StackPanel, which would measure it unbounded and run it off. -->
-                <Border Grid.Row="1" Background="{DynamicResource AppBg}"
-                        BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0"
-                        Padding="14,12">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <TextBlock Text="{Binding SavedMessage}" VerticalAlignment="Center"
-                                   FontSize="12" TextWrapping="Wrap" Margin="0,0,12,0"
-                                   Foreground="{DynamicResource MutedFg}"/>
-                        <Button Grid.Column="1"
-                                Content="{Binding [SettingsSave], Source={x:Static loc:Localizer.Instance}}"
-                                Command="{Binding SaveCommand}" Classes="primary" Padding="22,10"/>
-                    </Grid>
-                </Border>
+                    </Border>
 
                 </Grid>
             </TabItem>
