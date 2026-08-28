@@ -220,15 +220,21 @@
                     </StackPanel>
                 </TabItem.Header>
 
+                <!-- Save is pinned outside the scroll area. The fields alone very nearly fill the
+                     window, and the unresolvable-host banner pushes them past it, so a Save button
+                     that scrolled with the form sat below the fold exactly when something needed
+                     saving. -->
+                <Grid DataContext="{Binding Settings}" RowDefinitions="*,Auto">
+
                 <!-- Without disabling the horizontal bar the ScrollViewer measures its child at
                      unbounded width, so nothing inside ever wraps and the long sentences run off
                      the right edge instead. -->
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Disabled">
                     <!-- The label column sizes itself to the longest translation instead of a
                          fixed width, so Norwegian does not clip. -->
-                    <Grid DataContext="{Binding Settings}" Margin="14,14,14,12"
+                    <Grid Margin="14,14,14,12"
                           ColumnDefinitions="Auto,*"
-                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 
                         <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource QuietBg}"
                                 CornerRadius="8" Padding="13,12" Margin="0,0,0,4">
@@ -344,16 +350,26 @@
                             </Grid>
                         </Border>
 
-                        <StackPanel Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="12"
-                                    HorizontalAlignment="Right" Margin="0,18,0,0">
-                            <TextBlock Text="{Binding SavedMessage}" VerticalAlignment="Center" FontSize="12"
-                                       Foreground="{DynamicResource MutedFg}"/>
-                            <Button Content="{Binding [SettingsSave], Source={x:Static loc:Localizer.Instance}}"
-                                    Command="{Binding SaveCommand}" Classes="primary" Padding="22,10"/>
-                        </StackPanel>
-
                     </Grid>
                 </ScrollViewer>
+
+                <!-- The confirmation is a full sentence — "Saved 08:12. Changes take effect on
+                     next start." — so it gets a column to wrap in rather than a place in a
+                     horizontal StackPanel, which would measure it unbounded and run it off. -->
+                <Border Grid.Row="1" Background="{DynamicResource AppBg}"
+                        BorderBrush="{DynamicResource LineBrush}" BorderThickness="0,1,0,0"
+                        Padding="14,12">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="{Binding SavedMessage}" VerticalAlignment="Center"
+                                   FontSize="12" TextWrapping="Wrap" Margin="0,0,12,0"
+                                   Foreground="{DynamicResource MutedFg}"/>
+                        <Button Grid.Column="1"
+                                Content="{Binding [SettingsSave], Source={x:Static loc:Localizer.Instance}}"
+                                Command="{Binding SaveCommand}" Classes="primary" Padding="22,10"/>
+                    </Grid>
+                </Border>
+
+                </Grid>
             </TabItem>
 
         </TabControl>
