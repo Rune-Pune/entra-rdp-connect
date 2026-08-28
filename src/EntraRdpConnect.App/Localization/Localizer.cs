@@ -8,7 +8,7 @@ namespace EntraRdpConnect.App.Localization;
 /// <summary>
 /// Tekstene brukeren ser. Engelsk er nøytralspråket; norsk ligger i Strings.nb.resx.
 ///
-/// XAML binder mot indekseren (<c>{Binding [Connect], Source=...}</c>), og siden klassen varsler
+/// XAML binder mot indekseren (<c>{Binding [ActionConnect], Source=...}</c>), og siden klassen varsler
 /// om endring på hele indekseren, bytter grensesnittet språk uten omstart.
 /// </summary>
 public sealed partial class Localizer : ObservableObject

@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using EntraRdpConnect.App.ViewModels;
 using EntraRdpConnect.Core.Application;
 using EntraRdpConnect.Core.Domain;
 using Xunit;
@@ -46,6 +47,7 @@ public sealed class LocalizationTests
     {
         { "Error", Enum.GetNames<SettingsError>() },
         { "Install", Enum.GetNames<InstallStage>() },
+        { "Action", Enum.GetNames<ConnectionAction>() },
         // Unknown er bevisst utelatt: da finnes det ingen forklaring å gi, og
         // presentasjonslaget faller tilbake på den tekniske meldingen fra unntaket.
         { "Failure", [.. Enum.GetNames<CommandFailure>().Where(n => n != nameof(CommandFailure.Unknown))] },

@@ -53,4 +53,29 @@ public sealed class RdpLoginHandlerTests
 
         Assert.Equal(1, resolverCalls);
     }
+
+    [Fact]
+    public async Task Avbrutt_tilkobling_aapner_ikke_nettleseren()
+    {
+        // The process keeps draining buffered output after being killed, so this line can arrive
+        // after the user pressed Cancel. Acting on it would open a browser window for a login
+        // that was called off — the one thing cancelling is supposed to prevent.
+        var resolverCalls = 0;
+        using var cancelled = new CancellationTokenSource();
+        await cancelled.CancelAsync();
+
+        var handler = new RdpLoginHandler(
+            resolveRedirectUrl: (url, ct) =>
+            {
+                resolverCalls++;
+                return Task.FromResult(new Uri(RedirectUrl));
+            },
+            submit: (text, ct) => Task.CompletedTask,
+            cancellationToken: cancelled.Token);
+
+        handler.OnLine("Browse to: https://login.microsoftonline.com/a/authorize");
+        await handler.Completion;
+
+        Assert.Equal(0, resolverCalls);
+    }
 }

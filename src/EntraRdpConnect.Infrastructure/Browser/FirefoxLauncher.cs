@@ -12,6 +12,10 @@ public sealed class FirefoxLauncher : IBrowserLauncher
 {
     public Task OpenAsync(Uri url, CancellationToken ct = default)
     {
+        // Opening a browser window is not something we can take back, so the token is checked
+        // rather than accepted and ignored.
+        ct.ThrowIfCancellationRequested();
+
         using var process = Process.Start(new ProcessStartInfo
         {
             FileName = "firefox",
