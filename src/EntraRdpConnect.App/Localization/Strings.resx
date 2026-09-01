@@ -41,11 +41,18 @@
   <data name="Details"><value>Details</value></data>
 
   <!-- Connection tab -->
-  <data name="Connect"><value>Connect</value></data>
   <data name="Disconnect"><value>Disconnect</value></data>
+  <data name="ActionConnect"><value>Connect</value></data>
+  <data name="ActionRetry"><value>Try again</value></data>
+  <data name="ActionCancel"><value>Cancel</value></data>
+  <data name="StepTunnel"><value>Tunnel</value></data>
+  <data name="StepPhone"><value>Phone</value></data>
+  <data name="StepDesktop"><value>Desktop</value></data>
+  <data name="StepSignIn"><value>Sign-in</value></data>
   <data name="StatusNotConnected"><value>Not connected</value></data>
   <data name="StatusConnected"><value>Connected</value></data>
   <data name="StatusSomethingWentWrong"><value>Something went wrong</value></data>
+  <data name="StatusCancelled"><value>Cancelled</value></data>
   <data name="StatusBringingUpVpn"><value>Bringing up the VPN tunnel…</value></data>
   <data name="StatusWaitingForHandshake"><value>Waiting for handshake</value></data>
   <data name="StatusVpnUp"><value>VPN is up</value></data>
@@ -86,6 +93,7 @@
   <data name="LogOpeningBrowser"><value>Opening the browser for sign-in…</value></data>
   <data name="LogCodeCaptured"><value>Code captured — connecting.</value></data>
   <data name="LogSessionEnded"><value>The RDP session ended.</value></data>
+  <data name="LogCancelled"><value>Cancelled.</value></data>
   <data name="LogBringingDownVpn"><value>Bringing down the VPN tunnel…</value></data>
   <data name="LogVpnDown"><value>The tunnel is down.</value></data>
   <data name="LogNoVpnToBringDown"><value>No VPN to bring down.</value></data>
@@ -93,13 +101,18 @@
   <!-- Settings -->
   <data name="SettingsNoPasswordsStored"><value>No passwords are stored. You sign in through the browser (Entra) and approve on your phone.</value></data>
   <data name="SettingsHost"><value>Host (name)</value></data>
-  <data name="SettingsHostIp"><value>IP address (only used if the name doesn't resolve)</value></data>
+  <data name="SettingsHostIp"><value>IP address</value></data>
   <data name="SettingsUser"><value>User (UPN)</value></data>
   <data name="SettingsPort"><value>Port</value></data>
-  <data name="SettingsVpnInterface"><value>VPN interface</value></data>
-  <data name="SettingsHandshakeTimeout"><value>Handshake timeout (seconds)</value></data>
+  <data name="SettingsVpnInterface"><value>Interface</value></data>
+  <data name="SettingsHandshakeTimeout"><value>Handshake timeout (s)</value></data>
   <data name="SettingsExtraArgs"><value>xfreerdp3 arguments</value></data>
   <data name="SettingsLanguage"><value>Language</value></data>
+  <data name="SettingsHostIpHint"><value>Only used if the name doesn't resolve.</value></data>
+  <data name="SettingsGroupTarget"><value>Target</value></data>
+  <data name="SettingsGroupTunnel"><value>Tunnel</value></data>
+  <data name="SettingsGroupRemoteDesktop"><value>Remote desktop</value></data>
+  <data name="SettingsGroupApp"><value>App</value></data>
   <data name="SettingsSave"><value>Save</value></data>
   <data name="SettingsSaved"><value>Saved {0}. Changes take effect on next start.</value></data>
   <data name="SettingsHostsEntryAdded"><value>Added an entry to /etc/hosts.</value></data>

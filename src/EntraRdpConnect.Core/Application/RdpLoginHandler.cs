@@ -33,6 +33,12 @@ public sealed class RdpLoginHandler
     /// utløser handling.</summary>
     public void OnLine(string line)
     {
+        // The process keeps draining buffered output after it is killed, so a "Browse to:" line
+        // written before cancellation can still arrive afterwards. Without this check the user
+        // presses Cancel and a browser window opens anyway, for a login they just called off.
+        if (_ct.IsCancellationRequested)
+            return;
+
         if (!BrowseUrlParser.TryParse(line, out var loginUrl))
             return;
 
