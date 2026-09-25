@@ -3,7 +3,8 @@
 # entra-rdp-connect
 
 **One-click remote desktop from Linux to an Entra ID-joined Windows PC — with optional VPN.**
-Built for my own needs, and maybe usefull for someone else too?
+<br>
+*Built for my own needs, and maybe usefull for someone else too*?
 
 [![.NET](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![Avalonia](https://img.shields.io/badge/Avalonia-12-8B44AC)](https://avaloniaui.net/)
